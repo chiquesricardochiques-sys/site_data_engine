@@ -1,0 +1,29 @@
+<footer>
+    <div class="footer-grid">
+        
+
+        
+
+        <div class="footer-box">
+            <h4>Social</h4>
+            <div class="social-row">
+                {{#if textos.instagram}}
+                    <a href="{{textos.instagram}}" target="_blank"><i class="fab fa-instagram"></i></a>
+                {{/if}}
+                {{#if textos.facebook}}
+                    <a href="{{textos.facebook}}" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                {{/if}}
+                {{#if textos.whatsapp}}
+                    <a href="{{textos.whatsapp}}" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                {{/if}}
+                {{#if textos.tiktok}}
+                    <a href="{{textos.tiktok}}" target="_blank"><i class="fab fa-tiktok"></i></a>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-bar">
+        <p>&copy; {{textos.footer_text}}</p>
+    </div>
+</footer>

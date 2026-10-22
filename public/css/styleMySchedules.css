@@ -1,0 +1,352 @@
+/* ============================================================
+   ESTILOS DE MEUS AGENDAMENTOS (Idêntico ao App)
+   ============================================================ */
+
+.my-schedules-page {
+    flex: 1;
+    background-color: #141414;
+    min-height: 100vh;
+    color: #FFFFFF;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+.my-schedules-page .content {
+    padding: 16px;
+    padding-top: 10px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Título */
+.title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+/* Alertas */
+.alert-error {
+    color: #ff6b6b;
+    background-color: #222222;
+    border: 1px solid #ff6b6b;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.alert-success {
+    color: #51cf66;
+    background-color: #222222;
+    border: 1px solid #51cf66;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+/* Alternador de Cenários */
+.cenario-container {
+    display: flex;
+    background-color: #222222;
+    border-radius: 10px;
+    border: 1px solid #333333;
+    padding: 3px;
+    margin-bottom: 10px;
+}
+
+.cenario-button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 10px 0;
+    border-radius: 7px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.cenario-button i {
+    color: #777777;
+    font-size: 13px;
+}
+
+.cenario-button-ativo {
+    background-color: #FFC107;
+}
+
+.cenario-button-ativo i {
+    color: #000000;
+}
+
+.cenario-button-text {
+    color: #777777;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.cenario-button-text-ativo {
+    color: #000000;
+}
+
+/* Filtros por Abas */
+.filtros-tab-container {
+    display: flex;
+    background-color: #222222;
+    border-radius: 10px;
+    border: 1px solid #333333;
+    padding: 3px;
+    margin-bottom: 12px;
+}
+
+.filtro-tab-button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 0;
+    border-radius: 7px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.filtro-tab-button-ativo {
+    background-color: #FFC107;
+}
+
+.filtro-tab-button-text {
+    color: #777777;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.filtro-tab-button-text-ativo {
+    color: #000000;
+}
+
+/* Lista de Cards */
+.lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    padding-bottom: 40px;
+    margin-bottom: 70px;
+}
+
+.card {
+    background-color: #222222;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid #333333;
+}
+
+.card-cancelado {
+    opacity: 0.5;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.data-texto {
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* Pílula de Status */
+.status-pill {
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid #FFC107;
+}
+.status-pill-agendado { border-color: #FFC107; }
+.status-pill-concluido { border-color: #51cf66; }
+.status-pill-cancelado { border-color: #ff6b6b; }
+
+.status-pill-text {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #FFC107;
+}
+.status-pill-concluido .status-pill-text { color: #51cf66; }
+.status-pill-cancelado .status-pill-text { color: #ff6b6b; }
+
+.servicos-text {
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+}
+
+.divider {
+    height: 1px;
+    background-color: #333333;
+    margin-bottom: 10px;
+}
+
+.sub-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.sub-info-label {
+    display: block;
+    color: #777777;
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.sub-info-value {
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.sub-info-value-valor {
+    color: #FFC107;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* Countdown e Barra de Progresso */
+.countdown-container {
+    margin-bottom: 8px;
+}
+
+.countdown-text {
+    display: block;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.progress-bg {
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+    background-color: #333333;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    background-color: #FFC107;
+}
+
+.obs-text {
+    display: block;
+    color: #777777;
+    font-size: 11px;
+    margin-bottom: 6px;
+    font-style: italic;
+}
+
+/* Botão de Cancelar */
+.btn-delete {
+    width: 100%;
+    margin-top: 10px;
+    background: transparent;
+    align-items: center;
+    padding: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.btn-delete:hover {
+    background-color: rgba(255, 107, 107, 0.1);
+}
+
+/* Mensagens de Vazio */
+.empty-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 200px;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #333333;
+    background-color: #222222;
+    text-align: center;
+}
+
+.empty-titulo {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.empty-texto {
+    color: #777777;
+    font-size: 12px;
+}
+
+/* Cartão de Login Exigido */
+.login-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 200px;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #333333;
+    background-color: #222222;
+    text-align: center;
+}
+
+.login-titulo {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.login-texto {
+    color: #777777;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.btn-login {
+    margin-top: 10px;
+    padding: 11px 20px;
+    border-radius: 8px;
+    background-color: #FFC107;
+    color: #000000;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+}

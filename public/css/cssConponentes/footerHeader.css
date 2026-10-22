@@ -1,0 +1,420 @@
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+header {
+    position: relative;
+    z-index: 1000;
+
+    width: 100%;
+    min-height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 22px;
+
+    background: #000000;
+
+    border-bottom:
+        1px solid rgba(255, 193, 7, 0.2);
+
+    box-shadow:
+        0 3px 15px rgba(0, 0, 0, 0.3);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.logo {
+    display: flex;
+    align-items: center;
+
+    color: #FFC107;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+}
+
+.logo img {
+    width: auto;
+    height: 40px !important;
+
+    object-fit: contain;
+}
+
+
+/* =========================================================
+   MENU HAMBURGUER
+   ========================================================= */
+
+.menu-toggle {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 5px;
+
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    width: 22px;
+    height: 2.5px;
+
+    background: #ffffff;
+
+    border-radius: 2px;
+
+    transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+}
+
+
+/* =========================================================
+   MENU ABERTO
+   ========================================================= */
+
+.menu-toggle.open span:nth-child(1) {
+    transform:
+        translateY(7.5px)
+        rotate(45deg);
+}
+
+.menu-toggle.open span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.open span:nth-child(3) {
+    transform:
+        translateY(-7.5px)
+        rotate(-45deg);
+}
+
+
+/* =========================================================
+   NAV MOBILE
+   ========================================================= */
+
+.nav-menu {
+    position: absolute;
+
+    top: 70px;
+    left: 0;
+
+    width: 100%;
+
+    background: #111317;
+
+    border-bottom:
+        1px solid rgba(255, 193, 7, 0.2);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.4);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateY(-10px);
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease,
+        visibility 0.25s ease;
+}
+
+.nav-menu.active {
+    opacity: 1;
+    visibility: visible;
+
+    transform: translateY(0);
+}
+
+.nav-menu ul {
+    list-style: none;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 15px 20px 20px;
+
+    margin: 0;
+
+    gap: 4px;
+}
+
+.nav-menu li {
+    width: 100%;
+}
+
+.nav-menu a {
+    display: block;
+
+    width: 100%;
+
+    padding: 12px 10px;
+
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    background:
+        rgba(255, 255, 255, 0.05);
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease;
+}
+
+.nav-menu a:hover {
+    color: #FFC107;
+
+    background:
+        rgba(255, 193, 7, 0.08);
+}
+
+
+/* =========================================================
+   BOTÃO ADMIN / AGENDAR
+   ========================================================= */
+
+.nav-menu .btn-admin {
+    margin-top: 8px;
+
+    padding: 12px 10px;
+
+    color: #000000;
+
+    background: #FFC107;
+
+    border: none;
+
+    border-radius: 8px;
+
+    text-align: center;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+.nav-menu .btn-admin:hover {
+    color: #000000;
+
+    background: #FFC107;
+
+    transform: none;
+}
+
+
+/* =========================================================
+   FOOTER NAVIGATION
+   ========================================================= */
+
+.footer-nav {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: space-around;
+
+    background: #000000;
+
+    border-top:
+        1px solid #333333;
+
+    box-shadow:
+        0 -3px 15px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================================================
+   NAV ITEM
+   ========================================================= */
+
+.footer-nav .nav-item {
+    position: relative;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+    color: #666666;
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* =========================================================
+   ÍCONE
+   ========================================================= */
+
+.footer-nav .nav-item i {
+    color: #666666;
+
+    font-size: 22px;
+
+    line-height: 22px;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+/*
+   No React Native o label só aparece
+   quando o item está ativo.
+*/
+
+.footer-nav .nav-item span {
+    display: none;
+
+    margin-top: 2px;
+
+    color: #FFC107;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    line-height: 12px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
+   ITEM ATIVO
+   ========================================================= */
+
+.footer-nav .nav-item.active {
+    color: #FFC107;
+}
+
+
+/* =========================================================
+   LABEL DO ITEM ATIVO
+   ========================================================= */
+
+.footer-nav .nav-item.active span {
+    display: block;
+}
+
+
+/* =========================================================
+   ÍCONE ATIVO
+   ========================================================= */
+
+.footer-nav .nav-item.active i {
+    color: #FFFFFF;
+}
+
+
+/* =========================================================
+   INDICADOR DOURADO DO ITEM ATIVO
+   ========================================================= */
+
+.footer-nav .nav-item.active::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 20px;
+    right: 20px;
+
+    height: 3px;
+
+    background: #FFC107;
+
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+
+/* =========================================================
+   HOVER FOOTER
+   ========================================================= */
+
+.footer-nav .nav-item:hover {
+    color: #FFC107;
+}
+
+.footer-nav .nav-item:hover i {
+    color: #FFC107;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    header {
+        padding: 0 18px;
+    }
+
+    .logo {
+        font-size: 16px;
+    }
+
+    .logo img {
+        height: 40px !important;
+    }
+
+    .footer-nav .nav-item {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .footer-nav .nav-item i {
+        font-size: 22px;
+    }
+
+    .footer-nav .nav-item.active::before {
+        left: 20px;
+        right: 20px;
+    }
+}

@@ -1,0 +1,34 @@
+<header>
+    <div class="logo">
+        {{#if textos.logo_img}}
+            <img src="/img/{{textos.logo_img}}" alt="{{textos.header_title}}" style="height:40px;">
+        {{else}}
+            <i class="fas fa-bolt"></i> {{textos.header_title}}
+        {{/if}}
+    </div>
+
+    
+    <div class="menu-toggle" id="mobile-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <nav class="nav-menu headers" id="nav-list">
+        <ul>
+            <li><a href="/admin/dashboard">Home</a></li>
+            <li><a href="/admin/services">Serviços</a></li>
+            <li><a href="/admin/professionals">Profissionals</a></li>
+            <li><a href="/admin/mostrarDashboardAgendamentos" style="color: var(--accent); border: 1px solid var(--accent); padding: 8px 20px; border-radius: 5px;">Painel</a></li>
+        </ul>
+    </nav>
+</header>
+<script>
+    const menuToggle = document.getElementById('mobile-menu');
+    const navList = document.getElementById('nav-list');
+
+    menuToggle.addEventListener('click', () => {
+        menuToggle.classList.toggle('open');
+        navList.classList.toggle('active');
+    });
+</script>

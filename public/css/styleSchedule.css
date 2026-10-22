@@ -1,0 +1,451 @@
+/* ============================================================
+   TELA DE AGENDAMENTO
+   Mesmos valores (cores, tamanhos, espaçamentos) dos componentes
+   do app: StatusAlerts, ProfessionalSelector, DateSelector,
+   TimeSlotSelector, ServiceSelector, NotesInput e BookingFooter.
+   Tudo escopado em .schedule-page.
+   ============================================================ */
+
+.schedule-page {
+    --bg-screen: #16181b;
+    --card: #222222;
+    --card-date: #1e1e1e;
+    --border: #333333;
+    --primary: #FFC107;
+    --on-primary: #000000;
+    --text: #FFFFFF;
+    --muted: #808080;
+    --muted-soft: #6c7278;
+    --no-photo: #777777;
+    --pill: rgba(0, 0, 0, 0.7);
+    --gold-focus: #c8a85a;
+    --danger: #ff8080;
+    --success: #80ff9f;
+
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 6px 16px 50px;
+    background: var(--bg-screen);
+    color: var(--text);
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 100%;
+}
+
+.schedule-page *,
+.schedule-page *::before,
+.schedule-page *::after {
+    box-sizing: border-box;
+}
+
+.schedule-page [hidden] {
+    display: none !important;
+}
+
+.schedule-page a {
+    text-decoration: none;
+}
+
+/* ---------------- AVISOS ---------------- */
+
+.schedule-page .alert {
+    margin-top: 8px;
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 8px;
+    background: var(--card);
+    font-size: 11px;
+}
+
+.schedule-page .alert-error {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.schedule-page .alert-success {
+    border-color: var(--success);
+    color: var(--success);
+}
+
+/* ---------------- TÍTULOS DE SEÇÃO ---------------- */
+
+.schedule-page .sel-section {
+    margin-bottom: 10px;
+}
+
+.schedule-page .sel-title {
+    margin: 18px 0 12px;
+    padding: 0 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text);
+}
+
+/* o título do horário não tem recuo lateral (grade ocupa a largura toda) */
+.schedule-page .sel-title.hours-title {
+    margin-bottom: 8px;
+    padding: 0;
+}
+
+/* ---------------- ROLAGEM HORIZONTAL ---------------- */
+
+.schedule-page .h-scroll {
+    display: flex;
+    padding: 5px 10px 5px 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.schedule-page .h-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* ---------------- CARDS 100x100 (profissional e serviço) ---------------- */
+
+.schedule-page .pro-card,
+.schedule-page .svc-face {
+    position: relative;
+    display: block;
+    flex: 0 0 100px;
+    width: 100px;
+    height: 100px;
+    margin-right: 12px;
+    padding: 0;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--card);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    font-family: inherit;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.schedule-page .svc-card {
+    display: block;
+    flex: 0 0 auto;
+    cursor: pointer;
+}
+
+.schedule-page .svc-card .svc-face {
+    margin-right: 12px;
+}
+
+.schedule-page .pro-card.selected,
+.schedule-page .svc-input:checked + .svc-face {
+    border-color: var(--primary);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+.schedule-page .pro-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s;
+}
+
+.schedule-page .pro-card.selected .pro-img {
+    transform: scale(1.1);
+}
+
+.schedule-page .no-photo {
+    position: absolute;
+    inset: 0 0 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--no-photo);
+}
+
+/* pílula com o nome, embaixo do card */
+.schedule-page .name-pill {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 95%;
+    padding: 6px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    background: var(--pill);
+    transform: translateX(-50%);
+}
+
+.schedule-page .svc-face .name-pill {
+    border-radius: 14px;
+}
+
+.schedule-page .name-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    color: var(--text);
+}
+
+.schedule-page .dur-text {
+    margin-top: 1px;
+    font-size: 9px;
+    font-weight: 500;
+    opacity: 0.85;
+    color: var(--text);
+}
+
+.schedule-page .pro-card.selected .name-pill,
+.schedule-page .svc-input:checked + .svc-face .name-pill {
+    border-color: var(--primary);
+    background: var(--primary);
+}
+
+.schedule-page .pro-card.selected .name-text,
+.schedule-page .svc-input:checked + .svc-face .name-text,
+.schedule-page .svc-input:checked + .svc-face .dur-text {
+    text-shadow: none;
+    color: var(--on-primary);
+}
+
+.schedule-page .svc-input:checked + .svc-face .dur-text {
+    opacity: 1;
+}
+
+/* checkbox real escondido: o card é o controle */
+.schedule-page .svc-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.schedule-page .svc-input:focus-visible + .svc-face {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* selo de check no canto (só no serviço marcado) */
+.schedule-page .check-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 3;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary);
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--on-primary);
+}
+
+.schedule-page .svc-input:checked + .svc-face .check-badge {
+    display: flex;
+}
+
+/* ---------------- DATAS (pílulas) ---------------- */
+
+.schedule-page .dates-scroll {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.schedule-page .date-card {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 40px;
+    margin-right: 8px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    background: var(--card-date);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.schedule-page .date-day {
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.schedule-page .date-card.selected {
+    border-color: var(--primary);
+    background: var(--primary);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: var(--on-primary);
+}
+
+/* ---------------- HORÁRIOS ---------------- */
+
+.schedule-page .hours-section {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.schedule-page .hours-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 6px;
+}
+
+.schedule-page .hour-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(25% - 4.5px);
+    padding: 10px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: var(--text);
+    cursor: pointer;
+    user-select: none;
+}
+
+.schedule-page .hour-card.selected {
+    border-color: var(--primary);
+    background: var(--primary);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+    font-weight: 900;
+    color: var(--on-primary);
+}
+
+/* ocupado (já agendado) ou bloqueado: riscado, sem clique */
+.schedule-page .hour-card.disabled {
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    font-weight: 500;
+    text-decoration: line-through;
+    color: var(--muted-soft);
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.schedule-page .empty-text {
+    margin: 0;
+    font-size: 12px;
+    font-style: italic;
+    color: var(--muted-soft);
+}
+
+/* ---------------- OBSERVAÇÕES ---------------- */
+
+.schedule-page .notes-section {
+    margin: 10px 0 20px;
+}
+
+.schedule-page .notes-title {
+    margin: 0 0 12px;
+    padding: 0 4px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text);
+}
+
+.schedule-page .notes-input {
+    display: block;
+    width: 100%;
+    min-height: 80px;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    outline: none;
+    background: #181818;
+    font-family: inherit;
+    font-size: 13px;
+    color: #FFFFFF;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.schedule-page .notes-input::placeholder {
+    color: #555555;
+}
+
+.schedule-page .notes-input:focus {
+    border-color: var(--gold-focus);
+    box-shadow: 0 0 4px rgba(200, 168, 90, 0.2);
+}
+
+/* ---------------- RESUMO + CONFIRMAR ---------------- */
+
+.schedule-page .footer-summary {
+    margin-top: 20px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 100, 0.08);
+    margin-bottom: 70px;
+}
+
+.schedule-page .summary-box {
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card);
+}
+
+.schedule-page .summary-text {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    text-align: center;
+    color: var(--text);
+}
+
+.schedule-page .confirm-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 0;
+    border: 0;
+    border-radius: 12px;
+    background: var(--primary);
+    box-shadow: 0 2px 3px rgba(255, 193, 7, 0.3);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: var(--on-primary);
+    cursor: pointer;
+}
+
+.schedule-page .confirm-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}

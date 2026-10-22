@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <!-- 🔥 CRITICAL: Meta viewport para mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Meu site oferece informações claras, rápidas e seguras sobre nossos serviços e novidades.">
+
+    <title>{{header_title}} | Serviços e Informações</title>
+
+    <!-- Fonts - apenas uma vez -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Ícones - apenas as necessárias -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- CSS base, sempre carrega em toda página -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/cssConponentes/footerHeader.css">
+
+    {{!-- ============================================================
+          CSS ESPECÍFICO POR PÁGINA
+          Cada página manda a flag `page` no res.render() do controller.
+          Esse if decide qual(is) CSS carregar de acordo com essa flag.
+    ============================================================ --}}
+
+    {{#if (eq page 'home')}}
+        {{!-- Página inicial pública (lista de serviços, profissionais, comentários) --}}
+        <link rel="stylesheet" href="/css/publicHome.css">
+
+    {{else if (eq page 'login')}}
+        {{!-- Tela de login do cliente --}}
+        {{!-- Tela de cadastro de cliente --}}
+        <link rel="stylesheet" href="/css/publicRegister.css">
+        <link rel="stylesheet" href="/css/publicLogin.css">
+
+    {{else if (eq page 'client-home')}}
+        {{!-- Área logada do cliente (dashboard/home depois do login) --}}
+        <link rel="stylesheet" href="/css/publicHome.css">
+        <link rel="stylesheet" href="/css/clientHome.css">
+
+    {{else}}
+        {{!-- Fallback: nenhuma flag `page` reconhecida.
+             Se cair aqui, alguma tela nova ainda não foi mapeada acima —
+             carrega o CSS base do site público pra não quebrar o layout. --}}
+        <link rel="stylesheet" href="/css/publicHome.css">
+    {{/if}}
+
+</head>
+<body>
+    {{> public/header}}
+
+    <main>
+        {{{body}}}
+    </main>
+
+    {{> public/footer}}
+
+    <!-- No seu main.handlebars -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+    lucide.createIcons(); // Inicializa os ícones
+    </script>
+</body>
+</html>

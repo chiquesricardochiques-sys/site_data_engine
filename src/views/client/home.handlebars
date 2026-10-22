@@ -1,0 +1,202 @@
+<div class="app-content client-home">
+
+    <!-- ======================================================
+         STATUS DO CLIENTE / CONVITE PARA LOGIN
+         ====================================================== -->
+    <section class="home-section">
+        <div class="status-wrap">
+
+            <h2 class="section-title">
+                {{#if logado}}O seu status{{else}}Acesse sua conta{{/if}}
+            </h2>
+
+            <div class="status-card">
+
+                <div class="status-header">
+                    <span class="greeting">
+                        {{#if logado}}Olá, {{cliente.nome}}{{else}}Bem-vindo!{{/if}}
+                    </span>
+
+                    {{#if proximoAgendamento}}
+                        <span class="status-badge status-{{proximoAgendamento.status}}">
+                            <i class="fas fa-clock"></i>
+                            {{proximoAgendamento.status_label}}
+                        </span>
+                    {{/if}}
+                </div>
+
+                {{#if logado}}
+
+                    {{#if proximoAgendamento}}
+                        {{#with proximoAgendamento}}
+                            <div class="status-details">
+                                <p class="status-services">{{servicos_texto}}</p>
+                                <p class="status-info">
+                                    Com <span class="highlight">{{profissional}}</span>
+                                </p>
+                                <p class="status-info">{{data_fmt}} às {{hora}}</p>
+                            </div>
+
+                            {{#if inicio_ms}}
+                                <div class="countdown"
+                                     id="countdown"
+                                     data-inicio="{{inicio_ms}}"
+                                     data-fim="{{fim_ms}}">
+                                    <div class="countdown-row">
+                                        <span class="countdown-text">Sincronizando...</span>
+                                        <span class="countdown-pct"></span>
+                                    </div>
+                                    <div class="progress-bg">
+                                        <div class="progress-fill"></div>
+                                    </div>
+                                </div>
+                            {{/if}}
+                        {{/with}}
+
+                        <a href="/client/my-schedules" class="ghost-btn">
+                            Ver Meus Agendamentos
+                        </a>
+                    {{else}}
+                        <p class="status-message">
+                            Você não tem horários agendados no momento.
+                        </p>
+                        <a href="/client/schedule" class="ghost-btn">
+                            Agendar Novo Horário
+                        </a>
+                    {{/if}}
+
+                {{else}}
+
+                    <p class="status-message">
+                        Faça login para ver seus agendamentos e marcar um novo horário.
+                    </p>
+                    <a href="/login" class="ghost-btn">Fazer Login</a>
+                    <a href="/register" class="text-link">Criar Minha Conta</a>
+
+                {{/if}}
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================================
+         NOSSOS ESPECIALISTAS
+         ====================================================== -->
+    {{#if profissionais.length}}
+        <section class="home-section">
+            <div class="specialists-header">
+                <h2 class="specialists-title">Nossos Especialistas</h2>
+                <p class="specialists-subtitle">
+                    Selecione seu profissional de confiança
+                </p>
+            </div>
+
+            <div class="specialists-scroll">
+                {{#each profissionais}}
+                    <a class="specialist-card"
+                       href="/client/schedule?profissional_id={{this.id}}">
+
+                        {{#if this.foto_url}}
+                            <img class="specialist-photo"
+                                 src="{{this.foto_url}}"
+                                 alt="{{this.nome}}"
+                                 loading="lazy">
+                        {{else}}
+                            <span class="specialist-initial">{{this.inicial}}</span>
+                        {{/if}}
+
+                        {{#if this.especialidade}}
+                            <span class="specialty-badge">{{this.especialidade}}</span>
+                        {{/if}}
+
+                        <div class="specialist-name">{{this.nome}}</div>
+
+                        <span class="specialist-btn">Agendar</span>
+                    </a>
+                {{/each}}
+            </div>
+        </section>
+    {{/if}}
+
+    <!-- ======================================================
+         AÇÕES RÁPIDAS (mapa | whatsapp | sair)
+         ====================================================== -->
+    {{#if temAcoes}}
+        <section class="home-section">
+            <div class="actions-row">
+
+                {{#if urlMapa}}
+                    <a class="action-item" style="--tint: #FFC107"
+                       href="{{urlMapa}}" target="_blank" rel="noopener">
+                        <span class="action-card"><i class="fas fa-map-marker-alt"></i></span>
+                        <span class="action-label">Mapa</span>
+                    </a>
+                {{/if}}
+
+                {{#if urlWhatsapp}}
+                    <a class="action-item" style="--tint: #25D366"
+                       href="{{urlWhatsapp}}" target="_blank" rel="noopener">
+                        <span class="action-card"><i class="fab fa-whatsapp"></i></span>
+                        <span class="action-label">WhatsApp</span>
+                    </a>
+                {{/if}}
+
+                {{#if logado}}
+                    <a class="action-item" style="--tint: #e35d5d" href="/logout">
+                        <span class="action-card"><i class="fas fa-sign-out-alt"></i></span>
+                        <span class="action-label">Sair</span>
+                    </a>
+                {{/if}}
+
+            </div>
+        </section>
+    {{/if}}
+
+</div>
+
+<script>
+(function () {
+    const el = document.getElementById('countdown');
+    if (!el) return;
+
+    const inicio = Number(el.dataset.inicio);
+    const fim = Number(el.dataset.fim);
+    if (!inicio || !fim) return;
+
+    const texto = el.querySelector('.countdown-text');
+    const pct = el.querySelector('.countdown-pct');
+    const fill = el.querySelector('.progress-fill');
+
+    function atualizar() {
+        const agora = Date.now();
+        let msg;
+        let progresso;
+
+        if (agora < inicio) {
+            const diff = inicio - agora;
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+
+            msg = 'Faltam: ' + (d > 0 ? d + 'd ' : '') + h + 'h ' + m + 'm ' + s + 's';
+
+            // barra enche durante as 24h que antecedem o horário
+            progresso = Math.min(100, Math.max(5, 100 - (diff / 86400000) * 100));
+        } else if (agora < fim) {
+            msg = 'Horário atual';
+            progresso = Math.min(100, ((agora - inicio) / (fim - inicio)) * 100);
+        } else {
+            msg = 'Horário encerrado';
+            progresso = 100;
+        }
+
+        texto.textContent = msg;
+        pct.textContent = progresso > 5 ? Math.round(progresso) + '%' : '';
+        fill.style.width = progresso + '%';
+    }
+
+    atualizar();
+    setInterval(atualizar, 1000);
+})();
+</script>

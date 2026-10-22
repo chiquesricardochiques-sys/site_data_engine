@@ -1,0 +1,228 @@
+
+:root {
+    --bg-body: #050505;
+    --bg-card: #0f1115;
+    --bg-item: #161920;
+    --bg-item-hover: #1e222b;
+    --accent-blue: #0066cc; /* Azul Profissional */
+    --accent-glow: #3399ff; /* Azul Brilhante para destaque */
+    --text-main: #ffffff;
+    --text-muted: #8899a6;
+    --danger: #cc3333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; /* Remove flash de toque no Android */
+}
+
+body {
+    background-color: var(--bg-body);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    width: 100%;
+    padding: 20px;
+    overflow-x: hidden !important;
+}
+
+/* === CONTAINER PRINCIPAL === */
+.dashboard-container {
+    width: 100%;
+    max-width: 420px;
+    background-color: var(--bg-card);
+    border: 1px solid #1f2329;
+    border-radius: 16px;
+    padding: 30px 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    margin-top: 20px;
+    animation: fadeIn 0.8s ease-out;
+    margin-bottom: 10px;
+}
+
+/* === CABEÇALHO === */
+h1 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+    border-left: 4px solid var(--accent-blue);
+    padding-left: 12px;
+}
+
+p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+    padding-left: 16px; /* Alinhado visualmente com o texto do H1 */
+}
+
+/* === LISTA DE OPÇÕES === */
+ul.prinsipal {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Espaço entre os botões */
+}
+
+/* === ESTILO DOS LINKS (CARDS) === */
+ul.prinsipal li a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-item);
+    color: var(--text-main);
+    text-decoration: none;
+    padding: 18px 20px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Indicador visual (Barra lateral fina) */
+ul.prinsipal li a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: var(--accent-blue);
+    opacity: 0.5;
+    transition: 0.3s;
+}
+
+/* Seta sutil usando CSS puro */
+ul.prinsipal li a::after {
+    content: '→';
+    font-family: sans-serif;
+    color: var(--text-muted);
+    font-weight: 300;
+    transition: 0.3s;
+}
+
+/* === INTERATIVIDADE (HOVER & FOCUS) === */
+ul.prinsipal li a:hover, ul li a:focus {
+    background-color: var(--bg-item-hover);
+    transform: translateX(5px); /* Move levemente para direita */
+    border-color: rgba(51, 153, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+ul.prinsipal li a:hover::before {
+    background-color: var(--accent-glow);
+    opacity: 1;
+    width: 4px;
+}
+
+ul.prinsipal li a:hover::after {
+    color: var(--accent-glow);
+    transform: translateX(3px);
+}
+
+/* === BOTÃO SAIR (Destacado) === */
+ul.prinsipal li:last-child {
+    margin-top: 20px;
+    border-top: 1px solid #1f2329;
+    padding-top: 20px;
+}
+
+ul.prinsipal li:last-child a {
+    background-color: transparent;
+    border: 1px solid #331111;
+    color: #ff6b6b;
+}
+
+ul.prinsipal li:last-child a::before {
+    background-color: var(--danger);
+    width: 0; /* Sem barra lateral no sair */
+}
+
+ul.prinsipal li:last-child a:hover {
+    background-color: rgba(204, 51, 51, 0.1);
+    border-color: var(--danger);
+    transform: translateY(-2px);
+}
+
+ul.prinsipal li:last-child a::after {
+    content: '✕';
+    color: #ff6b6b;
+}
+
+/* === ANIMAÇÃO DE CASCATA (ENTRADA) === */
+/* Isso faz os itens entrarem um por um, tirando o ar estático */
+ul.prinsipal li {
+    opacity: 0;
+    animation: slideUp 0.5s ease forwards;
+}
+
+ul.prinsipal li:nth-child(1) { animation-delay: 0.1s; }
+ul.prinsipal li:nth-child(2) { animation-delay: 0.2s; }
+ul.prinsipal li:nth-child(3) { animation-delay: 0.3s; }
+ul.prinsipal li:nth-child(4) { animation-delay: 0.4s; }
+ul.prinsipal li:nth-child(5) { animation-delay: 0.5s; }
+ul.prinsipal li:nth-child(6) { animation-delay: 0.6s; }
+ul.prinsipal li:nth-child(7) { animation-delay: 0.7s; }
+ul.prinsipal li:nth-child(8) { animation-delay: 0.8s; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* === MEDIA QUERY PARA DESKTOP (TELAS GRANDES) === */
+@media (min-width: 1024px) {
+    body {
+        padding: 40px;
+        justify-content: flex-start; /* Para alinhar conteúdo ao topo */
+        align-items: center;
+    }
+
+    .dashboard-container {
+        max-width: 800px; /* aumenta a largura do painel */
+        padding: 40px 48px; /* mais espaço interno */
+        border-radius: 20px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7);
+        margin-top: 40px;
+    }
+
+    h1 {
+        font-size: 2rem; /* título maior */
+        padding-left: 16px;
+    }
+
+    p {
+        font-size: 1.1rem;
+        padding-left: 20px;
+        margin-bottom: 40px;
+    }
+
+    ul.prinsipal {
+        gap: 16px; /* mais espaço entre os cards */
+    }
+
+    ul.prinsipal li a {
+        padding: 22px 28px; /* cards maiores */
+        font-size: 1rem;
+    }
+
+    ul.prinsipal li a::after {
+        font-size: 1.1rem; /* seta maior */
+    }
+}

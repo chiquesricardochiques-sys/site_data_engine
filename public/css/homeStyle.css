@@ -1,0 +1,398 @@
+/* ============================================================
+   HOME DO CLIENTE
+   Mesmos valores (cores, tamanhos, espaçamentos) do app mobile.
+   Tudo escopado em .client-home pra não vazar pro resto do site
+   (por isso .section-title, .status-badge etc. não conflitam).
+   ============================================================ */
+
+.client-home {
+    /* paleta oficial CorteRapido */
+    --brand: #FFC107;
+    --brand-light: #ffdb4d;
+    --text-main: #ffffff;
+    --text-secondary: #8c929a;
+    --text-dark: #111317;
+    --bg-app: #0b0c0e;
+    --bg-card: #1e2125;
+    --bg-actions: #111317;
+    --red: #e35d5d;
+    --green: #25D366;
+    --success: #8fd19e;
+    --danger: #dc7777;
+
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 0 30px;
+    background: var(--bg-app);
+    color: var(--text-main);
+    box-sizing: border-box;
+}
+
+.client-home *,
+.client-home *::before,
+.client-home *::after {
+    box-sizing: border-box;
+}
+
+.client-home a {
+    text-decoration: none;
+}
+
+.client-home .home-section {
+    width: 100%;
+    margin-top: 25px;
+    padding: 0 20px;
+}
+
+/* ---------------- STATUS CARD ---------------- */
+
+.client-home .status-wrap {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 0 16px;
+}
+
+.client-home .section-title {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-main);
+}
+
+.client-home .status-card {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--bg-card);
+}
+
+.client-home .status-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.client-home .greeting {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.client-home .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--brand-light);
+}
+
+.client-home .status-badge i {
+    font-size: 10px;
+    color: var(--brand);
+}
+
+.client-home .status-badge.status-confirmado { color: var(--success); }
+.client-home .status-badge.status-concluido  { color: var(--success); }
+.client-home .status-badge.status-cancelado  { color: var(--danger); }
+
+.client-home .status-details {
+    margin-bottom: 12px;
+}
+
+.client-home .status-services {
+    margin: 0 0 2px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.client-home .status-info {
+    margin: 0;
+    font-size: 11px;
+    line-height: 16px;
+    color: var(--text-secondary);
+}
+
+.client-home .status-info .highlight {
+    font-weight: 600;
+    color: var(--brand-light);
+}
+
+.client-home .status-message {
+    margin: 0 0 16px;
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--text-secondary);
+}
+
+/* contador regressivo */
+.client-home .countdown {
+    margin-bottom: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.client-home .countdown-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--brand-light);
+}
+
+.client-home .progress-bg {
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.client-home .progress-fill {
+    width: 0;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--brand);
+    transition: width 0.4s linear;
+}
+
+/* botão primário: ghost (transparente, borda amarela) */
+.client-home .ghost-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 38px;
+    border: 1.5px solid var(--brand);
+    border-radius: 8px;
+    background: transparent;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    color: var(--brand);
+    transition: background 0.2s;
+}
+
+.client-home .ghost-btn:hover {
+    background: rgba(255, 193, 7, 0.1);
+}
+
+.client-home .text-link {
+    display: block;
+    margin-top: 12px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.client-home .text-link:hover {
+    color: var(--brand-light);
+}
+
+/* ---------------- ESPECIALISTAS ---------------- */
+
+.client-home .specialists-header {
+    margin-bottom: 24px;
+    padding: 0 16px;
+}
+
+.client-home .specialists-title {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-main);
+}
+
+.client-home .specialists-subtitle {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    color: var(--text-secondary);
+}
+
+.client-home .specialists-scroll {
+    display: flex;
+    gap: 12px;
+    /* 25 do container + 20 do card: espaço pra etiqueta que vaza no topo */
+    padding: 45px 16px 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.client-home .specialists-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.client-home .specialist-card {
+    position: relative;
+    display: flex;
+    flex: 0 0 150px;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 150px;
+    height: 210px;
+    border-radius: 16px;
+    background: #000;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+    color: var(--text-main);
+    transition: transform 0.2s;
+}
+
+.client-home .specialist-card:hover {
+    transform: translateY(-3px);
+}
+
+.client-home .specialist-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    object-fit: cover;
+}
+
+/* sem foto: inicial do nome */
+.client-home .specialist-initial {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    font-size: 64px;
+    font-weight: 800;
+    color: rgba(255, 193, 7, 0.25);
+    background: linear-gradient(160deg, #1e2125, #000);
+}
+
+/* etiqueta vazando pelo topo */
+.client-home .specialty-badge {
+    position: absolute;
+    top: -20px;
+    right: 12px;
+    z-index: 10;
+    max-width: 126px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: var(--brand);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.client-home .specialist-name {
+    position: relative;
+    z-index: 2;
+    padding: 10px;
+    border-radius: 16px 16px 0 0;
+    background: rgba(0, 0, 0, 0.4);
+    font-size: 15px;
+    font-weight: 800;
+    text-align: left;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.client-home .specialist-btn {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+    margin: 10px;
+    border-radius: 16px;
+    background: var(--brand);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-dark);
+}
+
+/* ---------------- AÇÕES RÁPIDAS ---------------- */
+
+.client-home .actions-row {
+    display: flex;
+    width: 100%;
+    padding: 12px 0;
+    border-radius: 15px;
+    background: var(--bg-actions);
+    box-shadow: 0 4px 3px rgba(0, 0, 0, 0.3);
+    margin-bottom: 50px;
+}
+
+.client-home .action-item {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+}
+
+.client-home .action-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 2px;
+    border: 1.2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    font-size: 22px;
+    color: #a19f99;
+    transition: all 0.2s;
+}
+
+/* brilho neon ao tocar / passar o mouse (igual ao "pressed" do app) */
+.client-home .action-item:hover .action-card,
+.client-home .action-item:active .action-card {
+    border-color: var(--tint);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px var(--tint);
+    color: var(--tint);
+    text-shadow: 0 0 8px var(--tint);
+}
+
+.client-home .action-label {
+    font-size: 8px;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.15);
+}

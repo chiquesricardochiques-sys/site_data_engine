@@ -1,0 +1,287 @@
+:root {
+    --bg: #000000;
+    --card: #0a0a0a;
+    --border: #1f1f1f;
+    --primary: #007aff;
+    --text-main: #ffffff;
+    --text-dim: #666;
+    --danger: #ff3b30;
+    --success: #34c759;
+    --warning: #ff9500;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+body {
+    background-color: var(--bg);
+    color: var(--text-main);
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+
+.container { width: 100%; max-width: 500px; }
+
+/* === FILTRO SUPERIOR === */
+.filter-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+h1 { font-size: 24px; font-weight: 700; margin-bottom: 15px; letter-spacing: -1px; }
+
+select {
+    width: 100%;
+    background: #111;
+    border: 1px solid var(--border);
+    color: white;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 15px;
+    outline: none;
+    margin-bottom: 12px;
+}
+
+.btn-filter {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* === SEÇÃO DE DIA === */
+.day-section {
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.day-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 15px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    padding: 10px 0;
+    z-index: 5;
+}
+
+.day-name { font-size: 18px; font-weight: 700; text-transform: capitalize; }
+.day-date { font-size: 14px; color: var(--text-dim); }
+
+/* DIA BLOQUEADO */
+.blocked-badge {
+    background: rgba(255, 59, 48, 0.1);
+    color: var(--danger);
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 59, 48, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+/* TIMELINE DE HORÁRIOS */
+.timeline {
+    border-left: 2px solid var(--border);
+    margin-left: 10px;
+    padding-left: 20px;
+}
+
+.time-slot {
+    position: relative;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* A bolinha na linha do tempo */
+.time-slot::before {
+    content: '';
+    position: absolute;
+    left: -27px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background: var(--border);
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+}
+
+.time-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dim);
+    min-width: 50px;
+}
+
+/* INFO DO AGENDAMENTO */
+.slot-content {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.slot-available { border-style: dashed; opacity: 0.6; }
+.slot-blocked { border-color: var(--danger); opacity: 0.5; }
+.slot-booked { border-left: 4px solid var(--primary); background: #0d0d0d; }
+
+.client-name { font-size: 14px; font-weight: 500; color: #fff; }
+
+/* Status Badges */
+.status-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: var(--accent);
+}
+
+.status-confirmado { color: var(--success); background: rgba(52, 199, 89, 0.1); }
+.status-pendente { color: var(--warning); background: rgba(255, 149, 0, 0.1); }
+
+/* === RESPONSIVO PARA MOBILE / TABLET - AGENDA SEMANAL === */
+@media (max-width: 500px) {
+    .container {
+        padding: 12px;
+    }
+
+    .filter-panel {
+        padding: 16px;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    select {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .btn-filter {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .day-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding: 8px 0;
+    }
+
+    .day-name {
+        font-size: 16px;
+    }
+
+    .day-date {
+        font-size: 12px;
+    }
+
+    .timeline {
+        margin-left: 5px;
+        padding-left: 15px;
+    }
+
+    .time-slot {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        margin-bottom: 16px;
+    }
+
+    .time-slot::before {
+        left: -22px;
+        width: 10px;
+        height: 10px;
+    }
+
+    .time-label {
+        font-size: 13px;
+        min-width: auto;
+    }
+
+    .slot-content {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .blocked-badge {
+        font-size: 13px;
+        padding: 12px;
+    }
+}
+
+/* Tablet / Medium screens */
+@media (min-width: 501px) and (max-width: 768px) {
+    .container {
+        max-width: 420px;
+    }
+
+    .filter-panel {
+        padding: 18px;
+        margin-bottom: 25px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    select {
+        font-size: 15px;
+    }
+
+    .btn-filter {
+        font-size: 15px;
+    }
+
+    .day-name {
+        font-size: 17px;
+    }
+
+    .day-date {
+        font-size: 13px;
+    }
+
+    .timeline {
+        padding-left: 18px;
+    }
+
+    .time-slot::before {
+        left: -24px;
+        width: 11px;
+        height: 11px;
+    }
+
+    .slot-content {
+        padding: 11px 14px;
+        font-size: 14px;
+    }
+
+    .blocked-badge {
+        font-size: 14px;
+        padding: 14px;
+    }
+}

@@ -1,0 +1,399 @@
+<div class="profile-container">
+
+    {{#if logado}}
+
+        <!-- =====================================================
+             CABEÇALHO
+             ===================================================== -->
+
+        <div class="profile-avatar">
+            <i class="fas fa-user-edit"></i>
+        </div>
+
+        <h1>Alterar Perfil</h1>
+
+        <p class="profile-subtitle">
+            Atualize seus dados pessoais
+        </p>
+
+
+        <!-- =====================================================
+             MENSAGEM DE SUCESSO
+             ===================================================== -->
+
+        {{#if success}}
+
+            <div class="message success">
+
+                <i class="fas fa-check-circle"></i>
+
+                <span>
+                    {{success}}
+                </span>
+
+            </div>
+
+        {{/if}}
+
+
+        <!-- =====================================================
+             MENSAGEM DE ERRO
+             ===================================================== -->
+
+        {{#if error}}
+
+            <div class="message error">
+
+                <i class="fas fa-exclamation-triangle"></i>
+
+                <span>
+                    {{error}}
+                </span>
+
+            </div>
+
+        {{/if}}
+
+
+        <!-- =====================================================
+             FORMULÁRIO
+             ===================================================== -->
+
+        <form
+            action="/profile"
+            method="POST"
+            class="profile-form"
+        >
+
+            <!-- =================================================
+                 NOME
+                 EDITÁVEL
+                 ================================================= -->
+
+            <div class="input-group">
+
+                <label for="nome">
+                    Nome Completo
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-id-card"></i>
+
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        value="{{cliente.nome}}"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 E-MAIL
+                 SOMENTE LEITURA
+                 ================================================= -->
+
+            <div class="input-group">
+
+                <label for="email">
+                    E-mail
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-envelope"></i>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{cliente.email}}"
+                        autocomplete="email"
+                        readonly
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 WHATSAPP
+                 EDITÁVEL
+                 ================================================= -->
+
+            <div class="input-group">
+
+                <label for="telInput">
+                    WhatsApp
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fab fa-whatsapp"></i>
+
+                    <input
+                        type="tel"
+                        id="telInput"
+                        name="telefone"
+                        value="{{cliente.telefone}}"
+                        autocomplete="tel"
+                        maxlength="15"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 STATUS DA CONTA
+                 SOMENTE LEITURA
+                 ================================================= -->
+
+            <div class="input-group">
+
+                <label for="status">
+                    Status da Conta
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-user-check"></i>
+
+                    <input
+                        type="text"
+                        id="status"
+                        value="{{cliente.status}}"
+                        readonly
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 STATUS DO E-MAIL
+                 SOMENTE LEITURA
+                 ================================================= -->
+
+            <div class="input-group">
+
+                <label>
+                    Status do E-mail
+                </label>
+
+                <div class="account-status">
+
+                    {{#if cliente.email_verificado}}
+
+                        <i class="fas fa-check-circle"></i>
+
+                        <span>
+                            E-mail verificado
+                        </span>
+
+                    {{else}}
+
+                        <i class="fas fa-exclamation-circle"></i>
+
+                        <span>
+                            E-mail não verificado
+                        </span>
+
+                    {{/if}}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 BOTÃO SALVAR
+                 ================================================= -->
+
+            <button
+                type="submit"
+                class="profile-edit-btn"
+            >
+
+                <i class="fas fa-save"></i>
+
+                <span>
+                    Salvar Alterações
+                </span>
+
+            </button>
+
+
+            <!-- =================================================
+                 BOTÃO CANCELAR
+                 ================================================= -->
+
+            <a
+                href="/profile"
+                class="back-link"
+            >
+
+                <i class="fas fa-chevron-left"></i>
+
+                <span>
+                    Cancelar
+                </span>
+
+            </a>
+
+        </form>
+
+
+    {{else}}
+
+        <!-- =====================================================
+             USUÁRIO NÃO LOGADO
+             ===================================================== -->
+
+        <div class="profile-avatar">
+
+            <i class="fas fa-user-circle"></i>
+
+        </div>
+
+        <h1>
+            Acesse seu perfil
+        </h1>
+
+        <p class="profile-description">
+            Entre na sua conta para alterar
+            seus dados pessoais.
+        </p>
+
+        <a
+            href="/login"
+            class="profile-login-btn"
+        >
+
+            <i class="fas fa-sign-in-alt"></i>
+
+            <span>
+                Fazer Login
+            </span>
+
+        </a>
+
+        <a
+            href="/register"
+            class="profile-register-btn"
+        >
+
+            <i class="fas fa-user-plus"></i>
+
+            <span>
+                Criar Minha Conta
+            </span>
+
+        </a>
+
+    {{/if}}
+
+
+    <!-- =========================================================
+         VOLTAR PARA O PAINEL
+         ========================================================= -->
+
+    <a
+        href="/client/home"
+        class="back-link"
+    >
+
+        <i class="fas fa-chevron-left"></i>
+
+        <span>
+            Painel Inicial
+        </span>
+
+    </a>
+
+</div>
+
+
+<!-- =============================================================
+     MÁSCARA DO TELEFONE
+     ============================================================= -->
+
+<script>
+
+    const telInput =
+        document.getElementById("telInput");
+
+
+    function formatarTelefone(valor) {
+
+        let numeros = valor
+            .replace(/\D/g, "")
+            .slice(0, 11);
+
+
+        if (numeros.length > 7) {
+
+            return "(" +
+                numeros.slice(0, 2) +
+                ") " +
+                numeros.slice(2, 7) +
+                "-" +
+                numeros.slice(7);
+
+        }
+
+
+        if (numeros.length > 2) {
+
+            return "(" +
+                numeros.slice(0, 2) +
+                ") " +
+                numeros.slice(2);
+
+        }
+
+
+        if (numeros.length > 0) {
+
+            return "(" + numeros;
+
+        }
+
+
+        return "";
+
+    }
+
+
+    if (telInput) {
+
+        telInput.value =
+            formatarTelefone(
+                telInput.value
+            );
+
+
+        telInput.addEventListener(
+            "input",
+            function () {
+
+                this.value =
+                    formatarTelefone(
+                        this.value
+                    );
+
+            }
+        );
+
+    }
+
+</script>

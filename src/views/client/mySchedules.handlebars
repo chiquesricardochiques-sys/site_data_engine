@@ -1,0 +1,135 @@
+<div class="my-schedules-page">
+    <div class="content">
+        {{#if logado}}
+
+            <div class="title-row">
+                <h1 class="title">{{titulo}}</h1>
+            </div>
+
+            <!-- Alternador de Cenários (Meus Agendamentos / Histórico) -->
+            <div class="cenario-container">
+                <a href="/client/my-schedules"
+                   class="cenario-button {{#unless ehHistorico}}cenario-button-ativo{{/unless}}">
+                    <i class="far fa-calendar-alt"></i>
+                    <span class="cenario-button-text {{#unless ehHistorico}}cenario-button-text-ativo{{/unless}}">Meus Agendamentos</span>
+                </a>
+
+                <a href="/client/my-schedules/history"
+                   class="cenario-button {{#if ehHistorico}}cenario-button-ativo{{/if}}">
+                    <i class="fas fa-history"></i>
+                    <span class="cenario-button-text {{#if ehHistorico}}cenario-button-text-ativo{{/if}}">Histórico</span>
+                </a>
+            </div>
+
+            <!-- Filtros de Status (Abas Estilizadas) -->
+            {{#if filtros}}
+                <div class="filtros-tab-container">
+                    {{#each filtros}}
+                        <a href="/client/my-schedules{{#if ../ehHistorico}}/history{{/if}}{{#if this.valor}}?status={{this.valor}}{{/if}}"
+                           class="filtro-tab-button {{#if this.ativo}}filtro-tab-button-ativo{{/if}}">
+                            <span class="filtro-tab-button-text {{#if this.ativo}}filtro-tab-button-text-ativo{{/if}}">
+                                {{this.rotulo}}
+                            </span>
+                        </a>
+                    {{/each}}
+                </div>
+            {{/if}}
+
+            {{#if success}}
+                <div class="alert-success">{{success}}</div>
+            {{/if}}
+
+            {{#if error}}
+                <div class="alert-error">{{error}}</div>
+            {{/if}}
+
+            <ul class="lista">
+                {{#each agendamentos}}
+                    <li class="card {{#ifEquals status 'cancelado'}}card-cancelado{{/ifEquals}}">
+                        
+                        <div class="card-header">
+                            <span class="data-texto">
+                                {{data}}{{#if hora}} às {{hora}}{{/if}}
+                            </span>
+                            <div class="status-pill status-pill-{{status}}">
+                                <span class="status-pill-text">{{status_label}}</span>
+                            </div>
+                        </div>
+
+                        <p class="servicos-text">
+                            {{#each servicos}}
+                                {{this.nome}}{{#unless @last}}, {{/unless}}
+                            {{/each}}
+                        </p>
+
+                        <div class="divider"></div>
+
+                        <div class="sub-info-row">
+                            <div>
+                                <span class="sub-info-label">Profissional</span>
+                                <span class="sub-info-value">{{profissional}}</span>
+                            </div>
+                            <div style="align-items: flex-end;">
+                                <span class="sub-info-label">Valor total</span>
+                                <span class="sub-info-value-valor">R$ {{preco_total_fmt}}</span>
+                            </div>
+                        </div>
+
+                        {{#if pode_cancelar}}
+                            <div class="countdown-container">
+                                <span class="countdown-text" id="timer-{{id}}">
+                                    <i class="fas fa-hourglass-half"></i> Sincronizando...
+                                </span>
+                                <div class="progress-bg">
+                                    <div class="progress-fill" id="bar-{{id}}" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        {{/if}}
+
+                        {{#if observacoes}}
+                            <span class="obs-text">Obs: {{observacoes}}</span>
+                        {{/if}}
+
+                        {{#if pode_cancelar}}
+                            <form method="POST" action="/client/my-schedules/delete" onsubmit="return confirm('Deseja realmente cancelar seu horário?');">
+                                <input type="hidden" name="agendamento_id" value="{{id}}">
+                                <button type="submit" class="btn-delete">
+                                    Cancelar agendamento
+                                </button>
+                            </form>
+                        {{/if}}
+
+                    </li>
+                {{else}}
+                    <div class="empty-message">
+                        <i class="{{#if ehHistorico}}fas fa-history{{else}}far fa-calendar-day{{/if}}" style="font-size: 26px; color: #777777;"></i>
+                        <span class="empty-titulo">
+                            Nenhum {{#if ehHistorico}}registro{{else}}agendamento{{/if}}
+                        </span>
+                        <span class="empty-texto">
+                            {{#if ehHistorico}}
+                                Você ainda não possui registros no histórico.
+                            {{else}}
+                                Você não possui horários agendados no momento.
+                            {{/if}}
+                        </span>
+                    </div>
+                {{/each}}
+            </ul>
+
+        {{else}}
+
+            <div class="login-card">
+                <i class="far fa-user-circle" style="font-size: 32px; color: #FFC107;"></i>
+                <span class="login-titulo">Faça seu login</span>
+                <span class="login-texto">
+                    Entre na sua conta para conferir seus agendamentos.
+                </span>
+                <a href="/login" class="btn-login">
+                    Fazer login
+                </a>
+            </div>
+
+        {{/if}}
+    </div>
+</div>

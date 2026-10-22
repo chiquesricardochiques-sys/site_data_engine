@@ -1,0 +1,113 @@
+<div class="login-page">
+
+    <div class="login-card">
+
+        <div class="header">
+
+            <div class="logo-circle">
+                <i data-lucide="shield-check"></i>
+            </div>
+
+            <h2>Acesso Restrito</h2>
+
+            <p class="subtitle">
+                Identifique-se para continuar
+            </p>
+
+        </div>
+
+
+        {{#if success}}
+
+            <div class="error-toast">
+
+                <i
+                    data-lucide="alert-circle"
+                    style="width: 16px;"
+                ></i>
+
+                {{success}}
+
+            </div>
+
+        {{/if}}
+
+
+        <form action="/login" method="POST">
+
+            <div class="form-group">
+
+                <div class="input-wrapper">
+
+                    <i data-lucide="mail"></i>
+
+                    <input
+                        type="email"
+                        name="email"
+                        required
+                        placeholder="Email de acesso"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <div class="input-wrapper">
+
+                    <i data-lucide="lock"></i>
+
+                    <input
+                        type="password"
+                        name="senha"
+                        required
+                        placeholder="Sua senha"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button type="submit">
+
+                Entrar
+
+                <i
+                    data-lucide="arrow-right"
+                    style="width: 18px;"
+                ></i>
+
+            </button>
+
+        </form>
+
+
+        <div class="footer-links">
+
+            <a href="/forgot-password">
+                Esqueci minha senha
+            </a>
+
+            <span>•</span>
+
+            <p>
+                Não tem conta?
+
+                <a href="/register">
+                    Cadastre-se
+                </a>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+    lucide.createIcons();
+</script>

@@ -1,0 +1,1088 @@
+/* ============================================================
+   CLIENT SCHEDULE
+   TELA DE AGENDAMENTO
+   TEMA NANO BANANA
+   ============================================================ */
+
+:root {
+    --schedule-bg: #202327;
+    --schedule-bg-dark: #181a1d;
+
+    --schedule-card: #292d31;
+    --schedule-card-hover: #30343a;
+
+    --schedule-gold: #c8a85a;
+    --schedule-gold-light: #f1d477;
+    --schedule-gold-soft: rgba(201, 169, 87, 0.14);
+
+    --schedule-text: #f1f1f1;
+    --schedule-text-soft: #c3c5c8;
+    --schedule-muted: #8f9398;
+
+    --schedule-border: rgba(201, 169, 87, 0.30);
+
+    --schedule-danger: #d96a6a;
+
+    --schedule-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ============================================================
+   CONTAINER PRINCIPAL
+   ============================================================ */
+
+.content {
+
+    box-sizing: border-box;
+
+    width: 100%;
+
+    min-height: calc(100vh - 70px);
+
+    padding: 20px 15px 100px;
+
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            #34383d 0%,
+            var(--schedule-bg) 42%,
+            var(--schedule-bg-dark) 100%
+        );
+
+    color: var(--schedule-text);
+
+    font-family:
+        'Inter',
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+}
+
+
+/* ============================================================
+   TÍTULOS
+   ============================================================ */
+
+.content .section-title {
+
+    margin:
+        22px 0 11px;
+
+    color:
+        var(--schedule-gold-light);
+
+    font-family:
+        'Montserrat',
+        sans-serif;
+
+    font-size:
+        16px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        0.2px;
+}
+
+
+.content .section-title:first-child {
+    margin-top: 0;
+}
+
+
+/* ============================================================
+   ALERTAS
+   ============================================================ */
+
+.alert-error,
+.alert-success {
+
+    box-sizing: border-box;
+
+    width: 100%;
+
+    padding:
+        11px 13px;
+
+    margin-bottom:
+        15px;
+
+    border-radius:
+        8px;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.4;
+}
+
+
+.alert-error {
+
+    color:
+        #ffb1b1;
+
+    background:
+        rgba(170, 50, 50, 0.18);
+
+    border:
+        1px solid
+        rgba(220, 80, 80, 0.35);
+}
+
+
+.alert-success {
+
+    color:
+        #d8efdc;
+
+    background:
+        rgba(60, 130, 75, 0.16);
+
+    border:
+        1px solid
+        rgba(90, 170, 105, 0.30);
+}
+
+
+/* ============================================================
+   PROFISSIONAL
+   ============================================================ */
+
+.stylist-select-wrapper {
+
+    position:
+        relative;
+
+    margin-bottom:
+        10px;
+}
+
+
+/* Pequena seta */
+
+.stylist-select-wrapper::after {
+
+    content:
+        "⌄";
+
+    position:
+        absolute;
+
+    right:
+        15px;
+
+    top:
+        50%;
+
+    transform:
+        translateY(-55%);
+
+    color:
+        var(--schedule-gold);
+
+    font-size:
+        17px;
+
+    pointer-events:
+        none;
+}
+
+
+.stylist-select {
+
+    box-sizing:
+        border-box;
+
+    width:
+        100%;
+
+    padding:
+        13px 40px 13px 14px;
+
+    color:
+        var(--schedule-text);
+
+    background:
+        var(--schedule-card);
+
+    border:
+        1px solid
+        var(--schedule-border);
+
+    border-radius:
+        8px;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    appearance:
+        none;
+
+    outline:
+        none;
+
+    cursor:
+        pointer;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.stylist-select:focus {
+
+    border-color:
+        var(--schedule-gold);
+
+    box-shadow:
+        0 0 0 2px
+        rgba(201, 169, 87, 0.08);
+}
+
+
+.stylist-select option {
+
+    background:
+        #292d31;
+
+    color:
+        #fff;
+}
+
+
+/* ============================================================
+   DATAS
+   ============================================================ */
+
+.dates-scroll {
+
+    display:
+        flex;
+
+    gap:
+        9px;
+
+    overflow-x:
+        auto;
+
+    padding:
+        2px 2px 10px;
+
+    margin-bottom:
+        19px;
+
+    scroll-snap-type:
+        x proximity;
+
+    scrollbar-width:
+        thin;
+
+    scrollbar-color:
+        var(--schedule-gold)
+        transparent;
+}
+
+
+.dates-scroll::-webkit-scrollbar {
+
+    height:
+        3px;
+}
+
+
+.dates-scroll::-webkit-scrollbar-track {
+
+    background:
+        transparent;
+}
+
+
+.dates-scroll::-webkit-scrollbar-thumb {
+
+    background:
+        var(--schedule-gold);
+
+    border-radius:
+        10px;
+}
+
+
+.date-card {
+
+    box-sizing:
+        border-box;
+
+    min-width:
+        65px;
+
+    height:
+        74px;
+
+    flex-shrink:
+        0;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        2px;
+
+    color:
+        var(--schedule-text-soft);
+
+    background:
+        var(--schedule-card);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius:
+        9px;
+
+    font-size:
+        11px;
+
+    cursor:
+        pointer;
+
+    scroll-snap-align:
+        start;
+
+    transition:
+        all .2s ease;
+}
+
+
+.date-card:hover {
+
+    border-color:
+        rgba(201, 169, 87, 0.45);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.date-card.selected {
+
+    color:
+        #171717;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--schedule-gold-light),
+            var(--schedule-gold)
+        );
+
+    border-color:
+        var(--schedule-gold-light);
+
+    box-shadow:
+        0 4px 14px
+        rgba(201, 169, 87, 0.20);
+}
+
+
+.date-card .day-num {
+
+    margin-top:
+        2px;
+
+    color:
+        inherit;
+
+    font-size:
+        19px;
+
+    font-weight:
+        700;
+}
+
+
+.date-card .badge {
+
+    margin-top:
+        1px;
+
+    font-size:
+        8px;
+
+    opacity:
+        0.8;
+}
+
+
+/* ============================================================
+   HORÁRIOS
+   ============================================================ */
+
+.hours-container {
+
+    margin-bottom:
+        20px;
+}
+
+
+.selected-date-badge {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    padding:
+        6px 12px;
+
+    margin-bottom:
+        11px;
+
+    color:
+        var(--schedule-gold-light);
+
+    background:
+        rgba(201, 169, 87, 0.07);
+
+    border:
+        1px solid
+        var(--schedule-border);
+
+    border-radius:
+        7px;
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+}
+
+
+.hours-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap:
+        8px;
+}
+
+
+.hour-card {
+
+    box-sizing:
+        border-box;
+
+    padding:
+        10px 5px;
+
+    color:
+        var(--schedule-text-soft);
+
+    background:
+        var(--schedule-card);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius:
+        7px;
+
+    text-align:
+        center;
+
+    font-size:
+        12px;
+
+    cursor:
+        pointer;
+
+    transition:
+        all .2s ease;
+}
+
+
+.hour-card:hover {
+
+    color:
+        var(--schedule-gold-light);
+
+    border-color:
+        var(--schedule-border);
+}
+
+
+.hour-card.selected {
+
+    color:
+        #171717;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--schedule-gold-light),
+            var(--schedule-gold)
+        );
+
+    border-color:
+        var(--schedule-gold-light);
+
+    font-weight:
+        700;
+
+    box-shadow:
+        0 3px 12px
+        rgba(201, 169, 87, 0.18);
+}
+
+
+.hour-card.disabled {
+
+    color:
+        #62666a;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border-color:
+        rgba(255,255,255,0.04);
+
+    cursor:
+        not-allowed;
+
+    text-decoration:
+        line-through;
+
+    opacity:
+        0.65;
+}
+
+
+/* ============================================================
+   SERVIÇOS
+   ============================================================ */
+
+.services-container {
+
+    margin-bottom:
+        20px;
+}
+
+
+.service-card {
+
+    box-sizing:
+        border-box;
+
+    width:
+        100%;
+
+    min-height:
+        62px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    padding:
+        12px 13px;
+
+    margin-bottom:
+        9px;
+
+    color:
+        var(--schedule-text);
+
+    background:
+        var(--schedule-card);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.07);
+
+    border-radius:
+        9px;
+
+    cursor:
+        pointer;
+
+    transition:
+        all .2s ease;
+}
+
+
+.service-card:hover {
+
+    border-color:
+        var(--schedule-border);
+
+    background:
+        var(--schedule-card-hover);
+}
+
+
+.service-card.selected {
+
+    background:
+        rgba(201, 169, 87, 0.075);
+
+    border-color:
+        var(--schedule-gold);
+}
+
+
+/* Lado esquerdo */
+
+.service-left {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        11px;
+
+    min-width:
+        0;
+}
+
+
+/* ============================================================
+   INFORMAÇÕES DO SERVIÇO
+   ============================================================ */
+
+.service-info {
+
+    min-width:
+        0;
+}
+
+
+.service-info h3 {
+
+    margin:
+        0;
+
+    color:
+        var(--schedule-text);
+
+    font-size:
+        13px;
+
+    font-weight:
+        600;
+
+    line-height:
+        1.4;
+}
+
+
+/* ============================================================
+   CHECKBOX
+   ============================================================ */
+
+.checkbox {
+
+    box-sizing:
+        border-box;
+
+    width:
+        21px;
+
+    height:
+        21px;
+
+    flex-shrink:
+        0;
+
+    display:
+        none;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    color:
+        #171717;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--schedule-gold-light),
+            var(--schedule-gold)
+        );
+
+    border-radius:
+        50%;
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+    box-shadow:
+        0 2px 8px
+        rgba(201, 169, 87, 0.20);
+}
+
+
+.service-card.selected .checkbox {
+
+    display:
+        flex;
+}
+
+
+/* ============================================================
+   OBSERVAÇÕES
+   ============================================================ */
+
+.observacoes-input {
+
+    box-sizing:
+        border-box;
+
+    width:
+        100%;
+
+    min-height:
+        80px;
+
+    padding:
+        12px 13px;
+
+    margin-bottom:
+        20px;
+
+    color:
+        var(--schedule-text);
+
+    background:
+        var(--schedule-card);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius:
+        9px;
+
+    font-family:
+        inherit;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.5;
+
+    resize:
+        vertical;
+
+    outline:
+        none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.observacoes-input::placeholder {
+
+    color:
+        var(--schedule-muted);
+}
+
+
+.observacoes-input:focus {
+
+    border-color:
+        var(--schedule-gold);
+
+    box-shadow:
+        0 0 0 2px
+        rgba(201, 169, 87, 0.07);
+}
+
+
+/* ============================================================
+   RESUMO
+   ============================================================ */
+
+.footer-summary {
+
+    box-sizing:
+        border-box;
+
+    width:
+        100%;
+
+    padding:
+        16px 0 0;
+
+    background:
+        transparent;
+
+    border-top:
+        1px solid
+        rgba(201, 169, 87, 0.16);
+}
+
+
+.summary-text {
+
+    margin:
+        0 0 12px;
+
+    color:
+        var(--schedule-muted);
+
+    font-size:
+        11px;
+
+    line-height:
+        1.5;
+
+    text-align:
+        center;
+}
+
+
+/* ============================================================
+   BOTÃO CONFIRMAR
+   ============================================================ */
+
+.confirm-btn {
+
+    box-sizing:
+        border-box;
+
+    width:
+        100%;
+
+    min-height:
+        46px;
+
+    padding:
+        13px 16px;
+
+    color:
+        #181818;
+
+    background:
+        linear-gradient(
+            90deg,
+            #e4c56e,
+            #f4d77d,
+            #d6b65c
+        );
+
+    border:
+        none;
+
+    border-radius:
+        25px;
+
+    font-family:
+        inherit;
+
+    font-size:
+        14px;
+
+    font-weight:
+        700;
+
+    text-align:
+        center;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 5px 18px
+        rgba(201, 169, 87, 0.25);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+}
+
+
+.confirm-btn:hover {
+
+    filter:
+        brightness(1.08);
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 7px 22px
+        rgba(201, 169, 87, 0.35);
+}
+
+
+.confirm-btn:active {
+
+    transform:
+        translateY(1px);
+
+    box-shadow:
+        0 3px 10px
+        rgba(201, 169, 87, 0.20);
+}
+
+
+/* ============================================================
+   MOBILE PEQUENO
+   ============================================================ */
+
+@media (max-width: 360px) {
+
+    .content {
+
+        padding:
+            17px 10px 95px;
+    }
+
+
+    .hours-grid {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+
+    .date-card {
+
+        min-width:
+            61px;
+
+        height:
+            70px;
+    }
+
+
+    .hour-card {
+
+        padding:
+            9px 4px;
+
+        font-size:
+            11px;
+    }
+
+
+    .service-card {
+
+        min-height:
+            58px;
+
+        padding:
+            11px;
+    }
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (min-width: 600px) {
+
+    .content {
+
+        max-width:
+            650px;
+
+        margin:
+            0 auto;
+
+        padding:
+            28px 25px 110px;
+    }
+
+
+    .hours-grid {
+
+        grid-template-columns:
+            repeat(5, 1fr);
+    }
+
+
+    .date-card {
+
+        min-width:
+            70px;
+    }
+}
+
+
+/* ============================================================
+   DESKTOP
+   ============================================================ */
+
+@media (min-width: 900px) {
+
+    .content {
+
+        max-width:
+            700px;
+
+        padding:
+            32px 30px 110px;
+    }
+
+
+    .hours-grid {
+
+        grid-template-columns:
+            repeat(6, 1fr);
+    }
+
+
+    .service-card {
+
+        min-height:
+            65px;
+    }
+}

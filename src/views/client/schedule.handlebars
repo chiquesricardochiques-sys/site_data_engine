@@ -1,0 +1,372 @@
+<div class="app-content schedule-page">
+
+    <!-- Avisos (erro/sucesso vindos do servidor) -->
+    {{#if error}}
+        <div class="alert alert-error">{{error}}</div>
+    {{/if}}
+    {{#if success}}
+        <div class="alert alert-success">{{success}}</div>
+    {{/if}}
+    <div class="alert alert-error" id="erroCliente" hidden></div>
+
+    <form id="formAgendamento" action="/client/schedule" method="POST">
+
+        <input type="hidden" name="profissional_id" id="profissionalInput" value="{{selectedProfissional}}">
+        <input type="hidden" name="data" id="dataInput" value="{{selectedData}}">
+        <input type="hidden" name="hora" id="horaInput" value="">
+
+        <!-- ================= PROFISSIONAL ================= -->
+        <section class="sel-section">
+            <h3 class="sel-title">Profissional</h3>
+
+            <div class="h-scroll" id="profissionaisScroll">
+                {{#each profissionais}}
+                    <button type="button"
+                            class="pro-card {{#if this.selecionado}}selected{{/if}}"
+                            data-id="{{this.id}}"
+                            data-nome="{{this.nome}}">
+
+                        {{#if this.foto_url}}
+                            <img class="pro-img" src="{{this.foto_url}}" alt="{{this.nome}}" loading="lazy">
+                        {{else}}
+                            <span class="no-photo">Sem foto</span>
+                        {{/if}}
+
+                        <span class="name-pill">
+                            <span class="name-text">{{this.nome}}</span>
+                        </span>
+                    </button>
+                {{/each}}
+            </div>
+        </section>
+
+        <!-- ================= DATA ================= -->
+        <section class="sel-section">
+            <h3 class="sel-title">Data</h3>
+            <div class="h-scroll dates-scroll" id="datesScroll">
+                <!-- gerado via JS -->
+            </div>
+        </section>
+
+        <!-- ================= HORÁRIO ================= -->
+        <section class="sel-section hours-section" id="horariosSection" {{#if semHorarios}}hidden{{/if}}>
+            <h3 class="sel-title hours-title">Horário</h3>
+
+            <div class="hours-grid" id="horariosGrid">
+                {{#each horariosDisponiveis}}
+                    <div class="hour-card {{#unless this.disponivel}}disabled {{this.motivo}}{{/unless}}"
+                         data-hora="{{this.hora}}"
+                         {{#unless this.disponivel}}title="Horário indisponível"{{/unless}}>{{this.hora}}</div>
+                {{else}}
+                    <p class="empty-text">Nenhum horário disponível.</p>
+                {{/each}}
+            </div>
+        </section>
+
+        <!-- ================= SERVIÇOS ================= -->
+        <section class="sel-section">
+            <h3 class="sel-title">Serviços</h3>
+
+            <div class="h-scroll" id="servicosScroll">
+                {{#each servicos}}
+                    <label class="svc-card"
+                           data-nome="{{this.nome}}"
+                           data-duracao="{{this.duracao_minutos}}"
+                           data-preco="{{this.preco}}">
+
+                        <input class="svc-input"
+                               type="checkbox"
+                               name="servico_id"
+                               value="{{this.id}}"
+                               {{#if this.selecionado}}checked{{/if}}>
+
+                        <span class="svc-face">
+                            {{#if this.foto_url}}
+                                <img class="pro-img" src="{{this.foto_url}}" alt="{{this.nome}}" loading="lazy">
+                            {{else}}
+                                <span class="no-photo">Sem foto</span>
+                            {{/if}}
+
+                            <span class="name-pill">
+                                <span class="name-text">{{this.nome}}</span>
+                                <span class="dur-text">{{this.duracao_minutos}} min</span>
+                            </span>
+
+                            <span class="check-badge">✓</span>
+                        </span>
+                    </label>
+                {{/each}}
+            </div>
+        </section>
+
+        <!-- ================= OBSERVAÇÕES ================= -->
+        <section class="notes-section">
+            <h3 class="notes-title">Observações</h3>
+            <textarea name="observacoes"
+                      class="notes-input"
+                      rows="3"
+                      placeholder="Ex: Prefiro sala climatizada, se possível."></textarea>
+        </section>
+
+        <!-- ================= RESUMO + CONFIRMAR ================= -->
+        <div class="footer-summary">
+            <div class="summary-box">
+                <p class="summary-text" id="summaryText">
+                    Toque nos serviços desejados para começar.
+                </p>
+            </div>
+
+            {{#if logado}}
+                <button type="submit" class="confirm-btn" id="confirmBtn">Confirmar</button>
+            {{else}}
+                <a href="/login" class="confirm-btn">Fazer Login para Agendar</a>
+            {{/if}}
+        </div>
+
+    </form>
+</div>
+
+<script>
+(function () {
+    const form = document.getElementById('formAgendamento');
+    const profissionalInput = document.getElementById('profissionalInput');
+    const dataInput = document.getElementById('dataInput');
+    const horaInput = document.getElementById('horaInput');
+    const profissionaisScroll = document.getElementById('profissionaisScroll');
+    const datesScroll = document.getElementById('datesScroll');
+    const horariosSection = document.getElementById('horariosSection');
+    const horariosGrid = document.getElementById('horariosGrid');
+    const summaryText = document.getElementById('summaryText');
+    const erroCliente = document.getElementById('erroCliente');
+    const confirmBtn = document.getElementById('confirmBtn');
+
+    const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+    // "hoje" vem do servidor (horário de Brasília), não do relógio do aparelho
+    const HOJE = '{{currentDate}}';
+
+    let usaHorarios = {{#if semHorarios}}false{{else}}true{{/if}};
+    let ultimaBusca = 0;
+
+    // ---------- avisos ----------
+
+    function mostrarErro(mensagem) {
+        erroCliente.textContent = mensagem;
+        erroCliente.hidden = false;
+        erroCliente.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function limparErro() {
+        erroCliente.hidden = true;
+    }
+
+    // ---------- datas ----------
+
+    function paraISO(d) {
+        const mes = String(d.getMonth() + 1).padStart(2, '0');
+        const dia = String(d.getDate()).padStart(2, '0');
+        return `${d.getFullYear()}-${mes}-${dia}`;
+    }
+
+    function dataDeISO(iso) {
+        return new Date(iso + 'T00:00:00');
+    }
+
+    function gerarDatas(diasNoFuturo = 14) {
+        datesScroll.innerHTML = '';
+
+        const base = HOJE ? dataDeISO(HOJE) : new Date();
+        const selecionada = dataInput.value || paraISO(base);
+        dataInput.value = selecionada;
+
+        for (let i = 0; i < diasNoFuturo; i++) {
+            const d = new Date(base);
+            d.setDate(base.getDate() + i);
+            const iso = paraISO(d);
+
+            const pilula = document.createElement('button');
+            pilula.type = 'button';
+            pilula.className = 'date-card' + (iso === selecionada ? ' selected' : '');
+            pilula.dataset.data = iso;
+            pilula.innerHTML =
+                '<span class="date-month">' + meses[d.getMonth()] + '</span>' +
+                '<span class="date-day">' + d.getDate() + '</span>';
+
+            pilula.addEventListener('click', () => selecionarData(iso));
+            datesScroll.appendChild(pilula);
+        }
+    }
+
+    async function selecionarData(iso) {
+        dataInput.value = iso;
+        [...datesScroll.children].forEach(c =>
+            c.classList.toggle('selected', c.dataset.data === iso)
+        );
+        await carregarHorarios();
+    }
+
+    // ---------- profissional ----------
+
+    profissionaisScroll.addEventListener('click', async (e) => {
+        const card = e.target.closest('.pro-card');
+        if (!card) return;
+
+        profissionalInput.value = card.dataset.id;
+        [...profissionaisScroll.querySelectorAll('.pro-card')]
+            .forEach(c => c.classList.toggle('selected', c === card));
+
+        await carregarHorarios();
+    });
+
+    // ---------- horários ----------
+
+    function mensagemNaGrade(texto) {
+        horariosGrid.innerHTML = '';
+        const p = document.createElement('p');
+        p.className = 'empty-text';
+        p.textContent = texto;
+        horariosGrid.appendChild(p);
+    }
+
+    // disponivel=false: motivo "agendado" (já tem cliente) ou "bloqueado"
+    function desenharHorarios(horarios) {
+        horariosSection.hidden = !usaHorarios;
+        horariosGrid.innerHTML = '';
+
+        if (!usaHorarios) return;
+
+        if (!horarios.length) {
+            mensagemNaGrade('Nenhum horário disponível.');
+            return;
+        }
+
+        horarios.forEach(h => {
+            const card = document.createElement('div');
+            card.className = 'hour-card' +
+                (h.disponivel ? '' : ' disabled ' + (h.motivo || 'agendado'));
+            card.dataset.hora = h.hora;
+            card.textContent = h.hora;
+            if (!h.disponivel) card.title = 'Horário indisponível';
+            horariosGrid.appendChild(card);
+        });
+    }
+
+    async function carregarHorarios() {
+        const busca = ++ultimaBusca; // ignora respostas antigas (cliques rápidos)
+
+        horaInput.value = '';
+        limparErro();
+        atualizarResumo();
+
+        if (usaHorarios) {
+            mensagemNaGrade('Carregando...');
+        }
+
+        try {
+            const params = new URLSearchParams({
+                profissional_id: profissionalInput.value,
+                data: dataInput.value
+            });
+
+            const res = await fetch('/client/ajax/horarios?' + params);
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+
+            const json = await res.json();
+            if (busca !== ultimaBusca) return;
+
+            usaHorarios = Number(json.usa_horarios) !== 0;
+            desenharHorarios(json.horarios || []);
+            atualizarResumo();
+
+        } catch (err) {
+            if (busca !== ultimaBusca) return;
+            horariosSection.hidden = false;
+            mensagemNaGrade('Erro ao carregar horários.');
+        }
+    }
+
+    // um único listener serve os cards vindos do servidor e do JS
+    horariosGrid.addEventListener('click', (e) => {
+        const card = e.target.closest('.hour-card');
+        if (!card || card.classList.contains('disabled')) return;
+
+        horaInput.value = card.dataset.hora;
+        [...horariosGrid.querySelectorAll('.hour-card')]
+            .forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+
+        limparErro();
+        atualizarResumo();
+    });
+
+    // ---------- resumo ----------
+
+    function atualizarResumo() {
+        const marcados = [...document.querySelectorAll('.svc-input:checked')]
+            .map(cb => cb.closest('.svc-card'));
+
+        if (!marcados.length) {
+            summaryText.textContent = 'Toque nos serviços desejados para começar.';
+            return;
+        }
+
+        const duracaoTotal = marcados.reduce((acc, c) => acc + Number(c.dataset.duracao), 0);
+        const precoTotal = marcados.reduce((acc, c) => acc + Number(c.dataset.preco), 0);
+
+        const proSelecionado = profissionaisScroll.querySelector('.pro-card.selected');
+        const nomePro = proSelecionado ? proSelecionado.dataset.nome : '';
+
+        const dataTexto = dataInput.value.split('-').reverse().join('/');
+        const hora = horaInput.value;
+
+        const infoHorario = usaHorarios
+            ? (hora ? ' às ' + hora : '')
+            : ' (Horário flexível)';
+
+        summaryText.textContent =
+            (nomePro ? 'Com ' + nomePro : '') +
+            ' • ' + dataTexto + infoHorario +
+            ' • ' + duracaoTotal + 'min' +
+            ' • R$ ' + precoTotal.toFixed(2).replace('.', ',');
+    }
+
+    document.querySelectorAll('.svc-input').forEach(cb => {
+        cb.addEventListener('change', () => {
+            limparErro();
+            atualizarResumo();
+        });
+    });
+
+    // ---------- envio ----------
+
+    form.addEventListener('submit', (e) => {
+        limparErro();
+
+        if (!profissionalInput.value) {
+            e.preventDefault();
+            mostrarErro('Selecione um profissional.');
+            return;
+        }
+
+        if (!document.querySelector('.svc-input:checked')) {
+            e.preventDefault();
+            mostrarErro('Selecione pelo menos um serviço.');
+            return;
+        }
+
+        if (usaHorarios && !horaInput.value) {
+            e.preventDefault();
+            mostrarErro('Selecione um horário.');
+            return;
+        }
+
+        if (confirmBtn) {
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = 'Agendando...';
+        }
+    });
+
+    gerarDatas();
+    atualizarResumo();
+})();
+</script>

@@ -1,0 +1,212 @@
+
+:root {
+    --bg: #000000;
+    --card: #0a0a0a;
+    --input-bg: #121212;
+    --border: #1f1f1f;
+    --primary: #007aff;
+    --text-main: #ffffff;
+    --text-muted: #888888;
+    --danger: #ff3b30;
+    --accent: #1d1d1f;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+body {
+    background-color: var(--bg);
+    color: var(--text-main);
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.container { width: 100%; max-width: 450px; }
+
+h1 { font-size: 22px; font-weight: 600; margin-bottom: 24px; letter-spacing: -0.5px; }
+h2 { font-size: 14px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 32px 0 16px; }
+
+/* === FILTRO REFINADO === */
+.filter-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.form-row { margin-bottom: 16px; }
+label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; padding-left: 4px; }
+
+select, input {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s;
+}
+
+select:focus, input:focus { border-color: var(--primary); }
+
+.btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.2s;
+}
+
+.btn-filter { background: var(--accent); color: white; border: 1px solid var(--border); }
+.btn-primary { background: var(--primary); color: white; }
+
+/* === GRID DE HORÁRIOS DISPONÍVEIS === */
+.time-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.time-chip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.time-val { font-size: 15px; font-weight: 500; }
+
+.btn-remove {
+    color: var(--danger);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    background: rgba(255, 59, 48, 0.1);
+    border-radius: 6px;
+}
+
+/* === LISTA DE AGENDAMENTOS (ESTILO CARD) === */
+.appointment-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.app-time {
+    background: var(--primary);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 60px;
+    text-align: center;
+}
+
+.app-info { flex: 1; }
+.app-name { font-size: 15px; font-weight: 500; display: block; }
+.app-status { font-size: 12px; color: var(--text-muted); text-transform: capitalize; }
+
+
+/* === MEDIA QUERY DESKTOP (TELAS >= 1024px) === */
+@media (min-width: 1024px) {
+
+    body {
+        padding: 40px 80px;
+    }
+
+    .container {
+        max-width: 800px; /* container maior no desktop */
+    }
+
+    h1 {
+        font-size: 2rem;
+        gap: 12px;
+    }
+
+    h2 {
+        font-size: 1rem;
+        margin: 40px 0 20px;
+    }
+
+    .filter-section {
+        padding: 30px;
+        border-radius: 20px;
+    }
+
+    label {
+        font-size: 0.95rem;
+    }
+
+    input, select {
+        font-size: 1.05rem;
+        padding: 14px 18px;
+    }
+
+    .btn {
+        padding: 16px;
+        font-size: 1rem;
+    }
+
+    .time-grid {
+        gap: 14px;
+    }
+
+    .time-chip {
+        padding: 16px;
+    }
+
+    .time-val {
+        font-size: 16px;
+    }
+
+    .btn-remove {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .appointment-card {
+        padding: 20px;
+        border-radius: 20px;
+        gap: 20px;
+    }
+
+    .app-time {
+        padding: 10px 16px;
+        font-size: 14px;
+        min-width: 70px;
+    }
+
+    .app-name {
+        font-size: 16px;
+    }
+
+    .app-status {
+        font-size: 13px;
+    }
+}

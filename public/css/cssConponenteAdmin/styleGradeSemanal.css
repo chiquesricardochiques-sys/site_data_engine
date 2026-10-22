@@ -1,0 +1,295 @@
+
+:root {
+    --bg: #000000;
+    --card: #0a0a0a;
+    --border: #1f1f1f;
+    --primary: #007aff;
+    --text: #ffffff;
+    --text-dim: #888;
+    --input-bg: #121212;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.container { width: 100%; max-width: 500px; padding-bottom: 50px; }
+
+/* === HEADER === */
+.header {
+    margin-bottom: 30px;
+}
+
+.header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 10px;
+    color: var(--primary);
+}
+
+.btn-back {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* === CARD DO DIA === */
+.day-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: 0.3s;
+}
+
+/* Destaque para quando o dia está "Ativo" */
+.day-card:has(input[type="checkbox"]:checked) {
+    border-color: rgba(0, 122, 255, 0.4);
+    background: rgba(0, 122, 255, 0.02);
+}
+
+.day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.day-name {
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+/* Switch Estilizado */
+.switch-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--text-dim);
+}
+
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+/* === GRIDS DE HORÁRIOS === */
+.time-settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dois campos por linha */
+    gap: 15px;
+}
+
+.time-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.time-group label {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+input[type="time"] {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    width: 100%;
+    outline: none;
+}
+
+input[type="time"]:focus {
+    border-color: var(--primary);
+}
+
+/* === BOTÃO SALVAR FIXO NO MOBILE === */
+.footer-actions {
+    position: sticky;
+    bottom: 20px;
+    margin-top: 30px;
+    z-index: 10;
+}
+
+.btn-save {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0, 122, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-save:hover { transform: translateY(-2px); }
+
+/* Divisória visual para Pausa */
+.break-divider {
+    grid-column: span 2;
+    height: 1px;
+    background: var(--border);
+    margin: 5px 0;
+    position: relative;
+}
+/* === PREVIEW DE IMAGEM PARA PROFISSIONAL (GRADE SEMANAL) === */
+.img-preview-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 12px 0 20px 0;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+}
+
+.img-preview-container img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* Foto redonda */
+    object-fit: cover;
+    border: 2px solid var(--border);
+}
+
+.img-preview-container div {
+    width: 50px;
+    height: 50px;
+    background: #1a1a1a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--border);
+}
+
+.img-preview-container span {
+    font-size: 12px;
+    color: var(--text-dim);
+}
+/* === RESPONSIVO PARA MOBILE / TABLET === */
+@media (max-width: 500px) {
+    .container {
+        padding: 16px;
+    }
+
+    .header h2 {
+        font-size: 18px;
+    }
+
+    .btn-back {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .img-preview-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .img-preview-container img,
+    .img-preview-container div {
+        width: 50px;
+        height: 50px;
+    }
+
+    .time-settings-grid {
+        grid-template-columns: 1fr; /* Cada campo em linha única no mobile */
+        gap: 12px;
+    }
+
+    .time-group label {
+        font-size: 10px;
+    }
+
+    input[type="time"] {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .footer-actions {
+        bottom: 10px;
+        padding: 0 16px;
+    }
+
+    .btn-save {
+        padding: 14px;
+        font-size: 15px;
+    }
+
+    .day-card {
+        padding: 16px;
+    }
+
+    .day-name {
+        font-size: 15px;
+    }
+
+    .switch-area {
+        font-size: 11px;
+    }
+}
+
+/* Tablet / Medium screens */
+@media (min-width: 501px) and (max-width: 768px) {
+    .container {
+        max-width: 400px;
+    }
+
+    .img-preview-container img,
+    .img-preview-container div {
+        width: 55px;
+        height: 55px;
+    }
+
+    .time-settings-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .day-name {
+        font-size: 16px;
+    }
+
+    .btn-save {
+        font-size: 15px;
+        padding: 14px;
+    }
+}
