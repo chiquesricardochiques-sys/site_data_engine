@@ -1,8 +1,10 @@
 // home
 const {home} = require("./clientControllers/clientHome")
+// home
+const {mostrarDados} = require("./clientControllers/dadosAgendamentoController")
 
 // agendamentos
-const { mostrarAgendamento, agendarHorario, horariosAjax } = require("./clientControllers/clientAgendaHorarios")
+const { mostrarAgendamento, agendarHorario, horariosAjax, servicosAjax } = require("./clientControllers/clientAgendaHorarios")
 
 
 // meusAgendamentos
@@ -14,6 +16,8 @@ const {
 // perfil
 const { mostrarPerfil, atualizarPerfil, mostrarAlterarPerfil } = require("./clientControllers/clientPerfil")
 
+
+
 module.exports = {
     deletarAgendamento,
     home,
@@ -24,6 +28,8 @@ module.exports = {
     mostrarAlterarPerfil,
     atualizarPerfil,
     horariosAjax,
-    historicoAgendamentos
+    historicoAgendamentos,
+    mostrarDados, 
+    servicosAjax
 };
 

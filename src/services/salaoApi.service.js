@@ -142,8 +142,18 @@ async function home() {
 // Retorna { success, data: { textos, salao, profissionais,
 //   proximo_agendamento } }
 async function clientHome(auth_user_id) {
+
+    const authUserID = idPositivo(
+        auth_user_id,
+        'Usuário inválido. Faça login novamente.'
+    );
+
+    // O /client-home trabalha com o id_cliente interno.
+    // O vínculo Auth <-> cliente é resolvido aqui.
+    const idCliente = await obterIdCliente(authUserID);
+
     return request('/client-home', {
-        auth_user_id: idPositivo(auth_user_id, 'Usuário inválido. Faça login novamente.')
+        id_cliente: idCliente
     });
 }
 
@@ -179,16 +189,28 @@ async function schedulePage(profissional_id = null, data = null) {
     return request('/schedule-page', body);
 }
 
+// Descobre o id_cliente interno (tabela clientes_auth_vinculos) a partir do
+// auth_user_id. Se a relação ainda não existe, ela é criada (é idempotente).
+// Não envia telefone de propósito: um telefone fora do padrão não pode
+// impedir o agendamento.
+async function obterIdCliente(auth_user_id) {
+    const resposta = await adicionarRelacaoCliente(auth_user_id);
+
+    return idPositivo(
+        resposta?.data?.id_cliente,
+        'Não foi possível identificar seu cadastro. Faça login novamente.'
+    );
+}
+
 async function agendarHorario({
     auth_user_id,
+    id_cliente = null,
     servico_ids,
     profissional_id,
     data,
     hora,
     observacoes = null
 }) {
-    const authUserID = idPositivo(auth_user_id, 'Usuário inválido. Faça login novamente.');
-
     if (!Array.isArray(servico_ids) || servico_ids.length === 0) {
         throw erroValidacao('Selecione pelo menos um serviço.');
     }
@@ -211,16 +233,21 @@ async function agendarHorario({
         throw erroValidacao('Selecione um horário.');
     }
 
+    // O Go identifica o cliente pelo id interno (id_cliente).
+    // Só consulta o Go se o id ainda não veio pronto da sessão.
+    const idCliente = id_cliente
+        ? idPositivo(id_cliente, 'Cliente inválido. Faça login novamente.')
+        : await obterIdCliente(auth_user_id);
+
     return request('/agendar', {
-        auth_user_id: authUserID,
+        id_cliente: idCliente,
         servico_ids: servicos,
         profissional_id: profissionalID,
         data,
         hora,
-        observacoes: observacoes || null
+        observacao: observacoes || null
     });
 }
-
 // ============================================================
 // MEUS AGENDAMENTOS
 //
@@ -254,6 +281,75 @@ async function cancelarAgendamento({ auth_user_id, agendamento_id }) {
         agendamento_id: idPositivo(agendamento_id, 'Agendamento inválido.')
     });
 }
+
+// ============================================================
+// RELAÇÃO DO CLIENTE (vínculo Auth <-> cliente do salão)
+//
+// Rotas do Go:
+//   POST /auth/cliente/verificar
+//   POST /auth/cliente/adicionar
+//
+// Retornam { success, message?, data: { id_cliente, telefone? } }
+// Erro com status 404 = o cliente ainda não tem relação
+// (ou o salão está inativo).
+// ============================================================
+
+// Só consulta a relação existente.
+async function verificarRelacaoCliente(auth_user_id) {
+    return request('/auth/cliente/verificar', {
+        auth_user_id: idPositivo(auth_user_id, 'Usuário inválido. Faça login novamente.')
+    });
+}
+
+// Cria a relação se ainda não existir.
+// Se já existir, devolve a mesma e, quando o telefone é informado,
+// atualiza o telefone dela. O Go normaliza e valida o número.
+async function adicionarRelacaoCliente(auth_user_id, telefone = null) {
+    const body = {
+        auth_user_id: idPositivo(auth_user_id, 'Usuário inválido. Faça login novamente.')
+    };
+
+    const telefoneLimpo = String(telefone ?? '').trim();
+
+    if (telefoneLimpo) {
+        body.telefone = telefoneLimpo;
+    }
+
+    return request('/auth/cliente/adicionar', body);
+}
+
+// ============================================================
+// DADOS DO AGENDAMENTO (tela de detalhes)
+//
+// Rota do Go: POST /dados-agendamento
+//
+// Retorna { success, data: { id, status, status_label, data, dia_semana,
+//   hora, hora_fim, duracao_minutos, observacao, criado_em,
+//   profissional: { id, nome, especialidade, foto_url },
+//   salao: { nome, telefone, whatsapp, endereco, cidade, estado },
+//   servicos: [{ id, nome, foto_url, quantidade, duracao_minutos,
+//                preco_unitario, subtotal }],
+//   preco_total } }
+//
+// Erros: 404 = não existe (ou é de outro cliente), 409 = não está pendente.
+// ============================================================
+async function dadosAgendamento({ auth_user_id, id_cliente = null, agendamento_id }) {
+    const idCliente = id_cliente
+        ? idPositivo(id_cliente, 'Cliente inválido. Faça login novamente.')
+        : await obterIdCliente(auth_user_id);
+
+    return request('/dados-agendamento', {
+        id_cliente: idCliente,
+        agendamento_id: idPositivo(agendamento_id, 'Agendamento inválido.')
+    });
+}
+// Busca apenas os serviços vinculados a um profissional específico
+async function servicosProfissional(profissional_id) {
+    return request('/servicos-profissional', {
+        profissional_id: idPositivo(profissional_id, 'Profissional inválido.')
+    });
+}
+
 module.exports = {
     // home
     home,
@@ -261,9 +357,15 @@ module.exports = {
     // agendar
     buscarHorarios,
     schedulePage,
+    servicosProfissional, // <-- Adicionado aqui
     agendarHorario,
     // meus agendamentos
     meusAgendamentos,
     historicoAgendamentos,
-    cancelarAgendamento
+    cancelarAgendamento,
+    dadosAgendamento,
+    // relação do cliente
+    verificarRelacaoCliente,
+    adicionarRelacaoCliente,
+    obterIdCliente
 };

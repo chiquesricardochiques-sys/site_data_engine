@@ -79,7 +79,11 @@ function prepararAgendamento(item) {
         preco_total_fmt: formatarPreco(item.preco_total),
 
         status_label:
-            ROTULOS_STATUS[item.status] || item.status
+            ROTULOS_STATUS[item.status] || item.status,
+
+        // Link de detalhes: só aparece para agendamentos pendentes
+        pendente: item.status === 'pendente',
+        url_detalhes: `${'my-schedules'}/details/${item.id}`
     };
 }
 

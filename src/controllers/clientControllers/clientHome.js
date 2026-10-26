@@ -61,19 +61,47 @@ function prepararProfissionais(lista) {
 function prepararProximoAgendamento(item) {
     if (!item) return null;
 
-    const inicioMs = Date.parse(`${item.data}T${item.hora}:00${FUSO_SALAO}`);
-    const fimMs = Date.parse(`${item.data}T${item.hora_fim}:00${FUSO_SALAO}`);
+    const inicio = new Date(item.inicio);
+    const fim = new Date(item.fim);
+
+    const inicioValido = !Number.isNaN(inicio.getTime());
+    const fimValido = !Number.isNaN(fim.getTime());
+
+    const dataBase = inicioValido
+        ? inicio.toLocaleDateString('en-CA', {
+            timeZone: 'America/Sao_Paulo'
+        })
+        : null;
 
     return {
         ...item,
-        data_fmt: formatarData(item.data),
-        servicos_texto: (item.servicos || []).join(', '),
+
+        data_fmt: dataBase
+            ? formatarData(dataBase)
+            : null,
+
+        hora: inicioValido
+            ? inicio.toLocaleTimeString('pt-BR', {
+                timeZone: 'America/Sao_Paulo',
+                hour: '2-digit',
+                minute: '2-digit'
+            })
+            : null,
+
+        hora_fim: fimValido
+            ? fim.toLocaleTimeString('pt-BR', {
+                timeZone: 'America/Sao_Paulo',
+                hour: '2-digit',
+                minute: '2-digit'
+            })
+            : null,
+
         status_label: ROTULOS_STATUS[item.status] || item.status,
-        inicio_ms: Number.isNaN(inicioMs) ? null : inicioMs,
-        fim_ms: Number.isNaN(fimMs) ? null : fimMs
+
+        inicio_ms: inicioValido ? inicio.getTime() : null,
+        fim_ms: fimValido ? fim.getTime() : null
     };
 }
-
 // Home do cliente logado. Se o /client-home falhar, a página ainda
 // abre com a home pública (só fica sem o cartão do próximo agendamento).
 async function carregarHomeCliente(authUserId) {

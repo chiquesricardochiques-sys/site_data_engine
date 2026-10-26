@@ -1,0 +1,221 @@
+/* ============================================================
+   ESTILOS DO CARD E STATUS DO CLIENTE (MOBILE / COMPACTO)
+   ============================================================ */
+
+.client-home .status-wrap {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 0 12px;
+    background-color: red !important;
+}
+
+.client-home .section-title {
+    margin: 0 0 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    background-color: red !important;
+}
+
+/* ==========================================
+   CARD MINIMALISTA COM ANIMAÇÃO DE FUNDO
+   ========================================== */
+.client-home .status-card {
+    position: relative;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    overflow: hidden; /* Mantém a animação contida no card */
+    z-index: 1;
+}
+
+/* Orbe de luz animada se movendo suavemente atrás do card */
+.client-home .status-card::before {
+    content: '';
+    position: absolute;
+    top: -60%;
+    left: -60%;
+    width: 220%;
+    height: 220%;
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 193, 7, 0.15) 0%,
+        rgba(255, 193, 7, 0.03) 40%,
+        transparent 70%
+    );
+    animation: backgroundGlow 7s ease-in-out infinite alternate;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes backgroundGlow {
+    0% {
+        transform: translate(-10%, -10%) scale(1);
+    }
+    50% {
+        transform: translate(15%, 10%) scale(1.15);
+    }
+    100% {
+        transform: translate(-5%, 15%) scale(0.95);
+    }
+}
+
+/* Header Compacto */
+.client-home .status-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.client-home .greeting {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.client-home .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--brand-light);
+}
+
+.client-home .status-badge i {
+    font-size: 8px;
+    color: var(--brand);
+}
+
+.client-home .status-badge.status-confirmado { color: var(--success); }
+.client-home .status-badge.status-concluido  { color: var(--success); }
+.client-home .status-badge.status-cancelado  { color: var(--danger); }
+
+/* Detalhes do Agendamento */
+.client-home .status-details {
+    margin-bottom: 10px;
+}
+
+.client-home .status-services {
+    margin: 0 0 2px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.client-home .status-info {
+    margin: 0;
+    font-size: 10px;
+    line-height: 14px;
+    color: var(--text-secondary);
+}
+
+.client-home .status-info .highlight {
+    font-weight: 600;
+    color: var(--brand-light);
+}
+
+.client-home .status-message {
+    margin: 0 0 10px;
+    font-size: 11px;
+    line-height: 15px;
+    color: var(--text-secondary);
+}
+
+/* Contador Regressivo Clean */
+.client-home .countdown {
+    margin-bottom: 12px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.client-home .countdown-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--brand-light);
+}
+
+.client-home .progress-bg {
+    width: 100%;
+    height: 3px;
+    border-radius: 2px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.client-home .progress-fill {
+    width: 0;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--brand);
+    transition: width 0.4s linear;
+}
+
+/* ==========================================
+   CORREÇÃO E ESTILIZAÇÃO DOS BOTÕES
+   ========================================== */
+.client-home .status-card .ghost-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 36px !important;
+    margin-top: 4px;
+    padding: 0 12px !important;
+    border: 1.5px solid var(--brand) !important;
+    border-radius: 6px !important;
+    background: transparent !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.4px !important;
+    text-transform: uppercase !important;
+    color: var(--brand) !important;
+    text-decoration: none !important;
+    box-sizing: border-box !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer;
+}
+
+.client-home .status-card .ghost-btn:hover {
+    background: rgba(255, 193, 7, 0.12) !important;
+    color: var(--brand-light) !important;
+}
+
+.client-home .status-card .ghost-btn:active {
+    transform: scale(0.98);
+}
+
+.client-home .status-card .text-link {
+    display: block !important;
+    margin-top: 10px !important;
+    text-align: center !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    color: var(--text-secondary) !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease !important;
+}
+
+.client-home .status-card .text-link:hover {
+    color: var(--brand-light) !important;
+}

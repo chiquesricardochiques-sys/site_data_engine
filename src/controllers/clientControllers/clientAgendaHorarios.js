@@ -75,6 +75,23 @@ function formatarPreco(valor) {
     return Number(valor || 0).toFixed(2).replace('.', ',');
 }
 
+// id_cliente interno (tabela clientes_auth_vinculos).
+// Fica guardado na sessão para não consultar o Go a cada agendamento:
+// só o primeiro agendamento de cada login faz a consulta.
+async function obterIdClienteSessao(req) {
+    const cliente = req.session.cliente;
+
+    if (cliente.id_cliente) {
+        return cliente.id_cliente;
+    }
+
+    const idCliente = await salaoApi.obterIdCliente(cliente.auth_user_id);
+
+    cliente.id_cliente = idCliente;
+
+    return idCliente;
+}
+
 // ============================================================
 // AJAX - horários disponíveis
 // Responde: { usa_horarios, horarios }
@@ -146,17 +163,21 @@ async function mostrarAgendamento(req, res) {
             usa_horarios = 1
         } = dados;
 
-        // Campos prontos pra view
+        const servicosSelecionados = normalizarIds(req.query.servico_id);
+
+        // Campos prontos pra view (a tela usa "selecionado" para marcar os cards)
         const servicosView = servicos.map(servico => ({
             ...servico,
-            preco_fmt: formatarPreco(servico.preco)
+            preco_fmt: formatarPreco(servico.preco),
+            selecionado: servicosSelecionados.includes(servico.id)
         }));
 
         const profissionaisView = profissionais.map(profissional => ({
             ...profissional,
             rotulo: profissional.especialidade
                 ? `${profissional.nome} — ${profissional.especialidade}`
-                : profissional.nome
+                : profissional.nome,
+            selecionado: profissional.id === selectedProfissional
         }));
 
         return res.render(
@@ -168,7 +189,7 @@ async function mostrarAgendamento(req, res) {
                 profissionais: profissionaisView,
                 currentDate,
                 horariosDisponiveis,
-                selectedServicos: normalizarIds(req.query.servico_id),
+                selectedServicos: servicosSelecionados,
                 selectedProfissional,
                 selectedData,
                 usa_horarios,
@@ -215,8 +236,12 @@ async function agendarHorario(req, res) {
     });
 
     try {
+        // O Go identifica o cliente pelo id interno (id_cliente)
+        const id_cliente = await obterIdClienteSessao(req);
+
         const result = await salaoApi.agendarHorario({
             auth_user_id: req.session.cliente.auth_user_id,
+            id_cliente,
             servico_ids,
             profissional_id,
             data,
@@ -253,8 +278,50 @@ async function agendarHorario(req, res) {
     }
 }
 
+// ============================================================
+// AJAX - serviços do profissional selecionado
+// Responde: { success: true, servicos: [...] }
+// ============================================================
+
+async function servicosAjax(req, res) {
+    const { profissional_id } = req.body;
+
+    const profissionalId = Number(profissional_id);
+
+    if (!Number.isInteger(profissionalId) || profissionalId <= 0) {
+        return res.status(400).json({
+            success: false,
+            erro: 'Informe um profissional válido.'
+        });
+    }
+
+    try {
+        const servicos = await salaoApi.servicosProfissional(profissionalId);
+
+        // Formata o preço para exibição correta (ex: 50,00)
+        const servicosView = servicos.map(servico => ({
+            ...servico,
+            preco_fmt: formatarPreco(servico.preco)
+        }));
+
+        return res.json({
+            success: true,
+            servicos: servicosView
+        });
+
+    } catch (error) {
+        console.error('Erro ao buscar serviços do profissional via AJAX:', error);
+
+        return res.status(500).json({
+            success: false,
+            erro: 'Erro ao carregar serviços.'
+        });
+    }
+}
+
 module.exports = {
     horariosAjax,
     mostrarAgendamento,
-    agendarHorario
+    agendarHorario,
+    servicosAjax
 };

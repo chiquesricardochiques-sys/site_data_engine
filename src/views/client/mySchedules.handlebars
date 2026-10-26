@@ -1,135 +1,1135 @@
 <div class="my-schedules-page">
+
     <div class="content">
+
         {{#if logado}}
 
+            <!-- =====================================================
+                 TÍTULO
+            ====================================================== -->
+
             <div class="title-row">
-                <h1 class="title">{{titulo}}</h1>
+
+                <h1 class="title">
+                    {{titulo}}
+                </h1>
+
             </div>
 
-            <!-- Alternador de Cenários (Meus Agendamentos / Histórico) -->
+
+            <!-- =====================================================
+                 CENÁRIOS
+            ====================================================== -->
+
             <div class="cenario-container">
-                <a href="/client/my-schedules"
-                   class="cenario-button {{#unless ehHistorico}}cenario-button-ativo{{/unless}}">
+
+                <a
+                    href="/client/my-schedules"
+                    class="cenario-button {{#unless ehHistorico}}cenario-button-ativo{{/unless}}"
+                >
+
                     <i class="far fa-calendar-alt"></i>
-                    <span class="cenario-button-text {{#unless ehHistorico}}cenario-button-text-ativo{{/unless}}">Meus Agendamentos</span>
+
+                    <span
+                        class="cenario-button-text {{#unless ehHistorico}}cenario-button-text-ativo{{/unless}}"
+                    >
+                        Meus Agendamentos
+                    </span>
+
                 </a>
 
-                <a href="/client/my-schedules/history"
-                   class="cenario-button {{#if ehHistorico}}cenario-button-ativo{{/if}}">
+
+                <a
+                    href="/client/my-schedules/history"
+                    class="cenario-button {{#if ehHistorico}}cenario-button-ativo{{/if}}"
+                >
+
                     <i class="fas fa-history"></i>
-                    <span class="cenario-button-text {{#if ehHistorico}}cenario-button-text-ativo{{/if}}">Histórico</span>
+
+                    <span
+                        class="cenario-button-text {{#if ehHistorico}}cenario-button-text-ativo{{/if}}"
+                    >
+                        Histórico
+                    </span>
+
                 </a>
+
             </div>
 
-            <!-- Filtros de Status (Abas Estilizadas) -->
+
+            <!-- =====================================================
+                 FILTROS
+            ====================================================== -->
+
             {{#if filtros}}
+
                 <div class="filtros-tab-container">
+
                     {{#each filtros}}
-                        <a href="/client/my-schedules{{#if ../ehHistorico}}/history{{/if}}{{#if this.valor}}?status={{this.valor}}{{/if}}"
-                           class="filtro-tab-button {{#if this.ativo}}filtro-tab-button-ativo{{/if}}">
-                            <span class="filtro-tab-button-text {{#if this.ativo}}filtro-tab-button-text-ativo{{/if}}">
+
+                        <a
+                            href="/client/my-schedules{{#if ../ehHistorico}}/history{{/if}}{{#if this.valor}}?status={{this.valor}}{{/if}}"
+                            class="filtro-tab-button {{#if this.ativo}}filtro-tab-button-ativo{{/if}}"
+                        >
+
+                            <span
+                                class="filtro-tab-button-text {{#if this.ativo}}filtro-tab-button-text-ativo{{/if}}"
+                            >
                                 {{this.rotulo}}
                             </span>
+
                         </a>
+
                     {{/each}}
+
                 </div>
+
             {{/if}}
+
+
+            <!-- =====================================================
+                 MENSAGEM DE SUCESSO
+            ====================================================== -->
 
             {{#if success}}
-                <div class="alert-success">{{success}}</div>
+
+                <div class="alert-success">
+                    {{success}}
+                </div>
+
             {{/if}}
+
+
+            <!-- =====================================================
+                 MENSAGEM DE ERRO
+            ====================================================== -->
 
             {{#if error}}
-                <div class="alert-error">{{error}}</div>
+
+                <div class="alert-error">
+                    {{error}}
+                </div>
+
             {{/if}}
 
+
+            <!-- =====================================================
+                 LISTA DE AGENDAMENTOS
+            ====================================================== -->
+
             <ul class="lista">
+
                 {{#each agendamentos}}
-                    <li class="card {{#ifEquals status 'cancelado'}}card-cancelado{{/ifEquals}}">
-                        
+
+                    <li
+                        class="card {{#ifEquals status 'cancelado'}}card-cancelado{{/ifEquals}}"
+                    >
+
+                        <!-- =================================================
+                             CABEÇALHO
+                        ================================================== -->
+
                         <div class="card-header">
+
                             <span class="data-texto">
-                                {{data}}{{#if hora}} às {{hora}}{{/if}}
+
+                                {{data}}
+
+                                {{#if hora}}
+                                    às {{hora}}
+                                {{/if}}
+
+                                {{#if hora_fim}}
+                                    até {{hora_fim}}
+                                {{/if}}
+
                             </span>
+
+
                             <div class="status-pill status-pill-{{status}}">
-                                <span class="status-pill-text">{{status_label}}</span>
+
+                                <span class="status-pill-text">
+                                    {{status_label}}
+                                </span>
+
                             </div>
+
                         </div>
 
-                        <p class="servicos-text">
-                            {{#each servicos}}
-                                {{this.nome}}{{#unless @last}}, {{/unless}}
-                            {{/each}}
-                        </p>
+
+                        <!-- =================================================
+                             SERVIÇOS
+                        ================================================== -->
+
+                        {{#if servicos.length}}
+
+                            <p class="servicos-text">
+
+                                {{#each servicos}}
+
+                                    {{this.nome}}
+
+                                    {{#unless @last}}
+                                        ,
+                                    {{/unless}}
+
+                                {{/each}}
+
+                            </p>
+
+                        {{else}}
+
+                            <p class="servicos-text">
+                                Serviços não informados
+                            </p>
+
+                        {{/if}}
+
 
                         <div class="divider"></div>
 
+
+                        <!-- =================================================
+                             PROFISSIONAL / VALOR
+                        ================================================== -->
+
                         <div class="sub-info-row">
+
                             <div>
-                                <span class="sub-info-label">Profissional</span>
-                                <span class="sub-info-value">{{profissional}}</span>
+
+                                <span class="sub-info-label">
+                                    Profissional
+                                </span>
+
+                                <span class="sub-info-value">
+                                    {{profissional}}
+                                </span>
+
                             </div>
-                            <div style="align-items: flex-end;">
-                                <span class="sub-info-label">Valor total</span>
-                                <span class="sub-info-value-valor">R$ {{preco_total_fmt}}</span>
+
+
+                            <div class="sub-info-col-right">
+
+                                <span class="sub-info-label">
+                                    Valor total
+                                </span>
+
+                                <span class="sub-info-value-valor">
+                                    R$ {{preco_total_fmt}}
+                                </span>
+
                             </div>
+
                         </div>
 
-                        {{#if pode_cancelar}}
-                            <div class="countdown-container">
-                                <span class="countdown-text" id="timer-{{id}}">
-                                    <i class="fas fa-hourglass-half"></i> Sincronizando...
-                                </span>
-                                <div class="progress-bg">
-                                    <div class="progress-fill" id="bar-{{id}}" style="width: 0%;"></div>
+
+                        <!-- =================================================
+                             DURAÇÃO
+                        ================================================== -->
+
+                        {{#if duracao_total}}
+
+                            <div class="sub-info-row">
+
+                                <div>
+
+                                    <span class="sub-info-label">
+                                        Duração
+                                    </span>
+
+                                    <span class="sub-info-value">
+                                        {{duracao_total}} min
+                                    </span>
+
                                 </div>
+
                             </div>
+
                         {{/if}}
+
+
+                        <!-- =================================================
+                             CONTADOR
+                             
+                             Somente para a tela de agendamentos atuais.
+                             Histórico não possui contador.
+                        ================================================== -->
+
+                        {{#unless ehHistorico}}
+
+                            {{#if hora}}
+
+                                {{#if hora_fim}}
+
+                                    <div
+                                        class="countdown-container"
+                                        data-id="{{id}}"
+                                        data-data="{{dataTime}}"
+                                        data-hora="{{hora}}"
+                                        data-hora-fim="{{hora_fim}}"
+                                    >
+
+                                        <div class="countdown-status">
+
+                                            <span
+                                                class="countdown-text"
+                                                id="timer-{{id}}"
+                                            >
+                                                <i class="fas fa-hourglass-half"></i>
+                                                Sincronizando...
+                                            </span>
+
+                                        </div>
+
+
+                                        <div
+                                            class="progress-bg"
+                                            role="progressbar"
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            aria-valuenow="0"
+                                            aria-label="Progresso do atendimento"
+                                        >
+
+                                            <div
+                                                class="progress-fill"
+                                                id="bar-{{id}}"
+                                                style="width: 0%;"
+                                            ></div>
+
+                                        </div>
+
+                                    </div>
+
+                                {{/if}}
+
+                            {{/if}}
+
+                        {{/unless}}
+
+
+                        <!-- =================================================
+                             OBSERVAÇÃO
+                        ================================================== -->
 
                         {{#if observacoes}}
-                            <span class="obs-text">Obs: {{observacoes}}</span>
+
+                            <div class="obs-text">
+                                <strong>Obs:</strong>
+                                {{observacoes}}
+                            </div>
+
                         {{/if}}
 
+
+                        <!-- =================================================
+                             CANCELAR
+                        ================================================== -->
+
                         {{#if pode_cancelar}}
-                            <form method="POST" action="/client/my-schedules/delete" onsubmit="return confirm('Deseja realmente cancelar seu horário?');">
-                                <input type="hidden" name="agendamento_id" value="{{id}}">
-                                <button type="submit" class="btn-delete">
+
+                            <form
+                                method="POST"
+                                action="/client/my-schedules/delete"
+                                onsubmit="return confirm('Deseja realmente cancelar seu horário?');"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    name="agendamento_id"
+                                    value="{{id}}"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="btn-delete"
+                                >
                                     Cancelar agendamento
                                 </button>
+
                             </form>
+
+                        {{/if}}
+
+
+                        <!-- =================================================
+                             DETALHES
+                        ================================================== -->
+
+                        {{#if pendente}}
+
+                            <a
+                                href="{{url_detalhes}}"
+                                class="btn-details"
+                            >
+
+                                <i class="fas fa-info-circle"></i>
+
+                                Ver detalhes
+
+                            </a>
+
                         {{/if}}
 
                     </li>
+
                 {{else}}
-                    <div class="empty-message">
-                        <i class="{{#if ehHistorico}}fas fa-history{{else}}far fa-calendar-day{{/if}}" style="font-size: 26px; color: #777777;"></i>
+
+                    <!-- =================================================
+                         LISTA VAZIA
+                    ================================================== -->
+
+                    <li class="empty-message">
+
+                        <i
+                            class="{{#if ehHistorico}}fas fa-history{{else}}far fa-calendar-day{{/if}}"
+                        ></i>
+
+
                         <span class="empty-titulo">
-                            Nenhum {{#if ehHistorico}}registro{{else}}agendamento{{/if}}
-                        </span>
-                        <span class="empty-texto">
+
+                            Nenhum
+
                             {{#if ehHistorico}}
-                                Você ainda não possui registros no histórico.
+                                registro
                             {{else}}
-                                Você não possui horários agendados no momento.
+                                agendamento
                             {{/if}}
+
                         </span>
-                    </div>
+
+
+                        <span class="empty-texto">
+
+                            {{#if ehHistorico}}
+
+                                Você ainda não possui registros no histórico.
+
+                            {{else}}
+
+                                Você não possui horários agendados no momento.
+
+                            {{/if}}
+
+                        </span>
+
+                    </li>
+
                 {{/each}}
+
             </ul>
 
         {{else}}
 
+            <!-- =====================================================
+                 USUÁRIO NÃO LOGADO
+            ====================================================== -->
+
             <div class="login-card">
-                <i class="far fa-user-circle" style="font-size: 32px; color: #FFC107;"></i>
-                <span class="login-titulo">Faça seu login</span>
+
+                <i
+                    class="far fa-user-circle"
+                ></i>
+
+
+                <span class="login-titulo">
+                    Faça seu login
+                </span>
+
+
                 <span class="login-texto">
                     Entre na sua conta para conferir seus agendamentos.
                 </span>
-                <a href="/login" class="btn-login">
+
+
+                <a
+                    href="/login"
+                    class="btn-login"
+                >
                     Fazer login
                 </a>
+
             </div>
 
         {{/if}}
+
     </div>
+
 </div>
+
+
+<script>
+(function () {
+
+    'use strict';
+
+
+    /*
+     * ============================================================
+     * CONFIGURAÇÃO
+     * ============================================================
+     */
+
+    const INTERVALO_ATUALIZACAO = 1000;
+
+
+    /*
+     * Evita que a mesma página inicialize
+     * o contador mais de uma vez.
+     */
+    if (window.mySchedulesCountdownInicializado) {
+        return;
+    }
+
+    window.mySchedulesCountdownInicializado = true;
+
+
+    /*
+     * ============================================================
+     * DATA + HORA
+     * ============================================================
+     *
+     * Recebe:
+     *
+     * data = 2026-10-26
+     * hora = 09:30
+     *
+     * Retorna um Date no horário local
+     * do navegador.
+     */
+    function obterDataHora(data, hora) {
+
+        if (!data || !hora) {
+            return null;
+        }
+
+
+        const partesData =
+            String(data).split('-');
+
+
+        const partesHora =
+            String(hora).split(':');
+
+
+        if (partesData.length !== 3) {
+            return null;
+        }
+
+
+        if (partesHora.length < 2) {
+            return null;
+        }
+
+
+        const ano =
+            Number(partesData[0]);
+
+
+        const mes =
+            Number(partesData[1]);
+
+
+        const dia =
+            Number(partesData[2]);
+
+
+        const horaNumero =
+            Number(partesHora[0]);
+
+
+        const minuto =
+            Number(partesHora[1]);
+
+
+        const segundo =
+            Number(partesHora[2] || 0);
+
+
+        if (
+            !Number.isInteger(ano) ||
+            !Number.isInteger(mes) ||
+            !Number.isInteger(dia) ||
+            !Number.isInteger(horaNumero) ||
+            !Number.isInteger(minuto) ||
+            !Number.isInteger(segundo)
+        ) {
+            return null;
+        }
+
+
+        const dataHora =
+            new Date(
+                ano,
+                mes - 1,
+                dia,
+                horaNumero,
+                minuto,
+                segundo,
+                0
+            );
+
+
+        if (
+            Number.isNaN(
+                dataHora.getTime()
+            )
+        ) {
+            return null;
+        }
+
+
+        /*
+         * Proteção contra datas inválidas
+         * que o JavaScript normaliza sozinho.
+         *
+         * Exemplo:
+         *
+         * 32/10 → pode virar outro dia.
+         */
+        if (
+            dataHora.getFullYear() !== ano ||
+            dataHora.getMonth() !== mes - 1 ||
+            dataHora.getDate() !== dia ||
+            dataHora.getHours() !== horaNumero ||
+            dataHora.getMinutes() !== minuto
+        ) {
+            return null;
+        }
+
+
+        return dataHora;
+    }
+
+
+    /*
+     * ============================================================
+     * FORMATA TEMPO
+     * ============================================================
+     */
+
+    function formatarTempo(totalSegundos) {
+
+        const segundos =
+            Math.max(
+                0,
+                Math.floor(totalSegundos)
+            );
+
+
+        const dias =
+            Math.floor(
+                segundos / 86400
+            );
+
+
+        const horas =
+            Math.floor(
+                (segundos % 86400) / 3600
+            );
+
+
+        const minutos =
+            Math.floor(
+                (segundos % 3600) / 60
+            );
+
+
+        const segundosRestantes =
+            segundos % 60;
+
+
+        if (dias > 0) {
+
+            return (
+                `${dias}d ` +
+                `${String(horas).padStart(2, '0')}h`
+            );
+        }
+
+
+        if (horas > 0) {
+
+            return (
+                `${horas}h ` +
+                `${String(minutos).padStart(2, '0')}min`
+            );
+        }
+
+
+        if (minutos > 0) {
+
+            return (
+                `${minutos}min ` +
+                `${String(segundosRestantes).padStart(2, '0')}s`
+            );
+        }
+
+
+        return (
+            `${segundosRestantes}s`
+        );
+    }
+
+
+    /*
+     * ============================================================
+     * ATUALIZA ARIA DA BARRA
+     * ============================================================
+     */
+
+    function atualizarAcessibilidade(
+        progressBg,
+        progresso
+    ) {
+
+        if (!progressBg) {
+            return;
+        }
+
+
+        progressBg.setAttribute(
+            'aria-valuenow',
+            String(
+                Math.round(progresso)
+            )
+        );
+    }
+
+
+    /*
+     * ============================================================
+     * ATUALIZA UM CONTADOR
+     * ============================================================
+     */
+
+    function atualizarContador(container) {
+
+        if (!container) {
+            return;
+        }
+
+
+        const id =
+            container.dataset.id;
+
+
+        const data =
+            container.dataset.data;
+
+
+        const hora =
+            container.dataset.hora;
+
+
+        const horaFim =
+            container.dataset.horaFim;
+
+
+        const timer =
+            document.getElementById(
+                `timer-${id}`
+            );
+
+
+        const barra =
+            document.getElementById(
+                `bar-${id}`
+            );
+
+
+        const progressBg =
+            container.querySelector(
+                '.progress-bg'
+            );
+
+
+        if (
+            !timer ||
+            !barra
+        ) {
+            return;
+        }
+
+
+        /*
+         * --------------------------------------------------------
+         * CONVERTE INÍCIO E FIM
+         * --------------------------------------------------------
+         */
+
+        const inicio =
+            obterDataHora(
+                data,
+                hora
+            );
+
+
+        const fim =
+            obterDataHora(
+                data,
+                horaFim
+            );
+
+
+        /*
+         * Dados inválidos.
+         */
+
+        if (
+            !inicio ||
+            !fim
+        ) {
+
+            timer.innerHTML =
+                '<i class="fas fa-exclamation-triangle"></i> ' +
+                'Horário indisponível';
+
+
+            barra.style.width =
+                '0%';
+
+
+            atualizarAcessibilidade(
+                progressBg,
+                0
+            );
+
+
+            return;
+        }
+
+
+        /*
+         * --------------------------------------------------------
+         * MILISSEGUNDOS
+         * --------------------------------------------------------
+         */
+
+        const inicioMs =
+            inicio.getTime();
+
+
+        const fimMs =
+            fim.getTime();
+
+
+        const agoraMs =
+            Date.now();
+
+
+        /*
+         * --------------------------------------------------------
+         * VALIDA INTERVALO
+         * --------------------------------------------------------
+         */
+
+        if (
+            fimMs <= inicioMs
+        ) {
+
+            timer.innerHTML =
+                '<i class="fas fa-exclamation-triangle"></i> ' +
+                'Horário inválido';
+
+
+            barra.style.width =
+                '0%';
+
+
+            atualizarAcessibilidade(
+                progressBg,
+                0
+            );
+
+
+            return;
+        }
+
+
+        /*
+         * ========================================================
+         * ESTADO 1
+         * AINDA NÃO COMEÇOU
+         * ========================================================
+         */
+
+        if (
+            agoraMs < inicioMs
+        ) {
+
+            const restanteMs =
+                inicioMs - agoraMs;
+
+
+            const restanteSegundos =
+                restanteMs / 1000;
+
+
+            timer.innerHTML =
+                '<i class="fas fa-hourglass-half"></i> ' +
+                'Falta ' +
+                formatarTempo(
+                    restanteSegundos
+                ) +
+                ' para seu horário';
+
+
+            /*
+             * ----------------------------------------------------
+             * PROGRESSO ANTES DO ATENDIMENTO
+             * ----------------------------------------------------
+             *
+             * Usamos uma janela visual de 24 horas.
+             *
+             * IMPORTANTE:
+             * isso NÃO altera a duração do agendamento.
+             *
+             * É somente uma indicação visual
+             * de aproximação do horário.
+             */
+
+            const janelaMs =
+                24 * 60 * 60 * 1000;
+
+
+            const inicioContagemMs =
+                inicioMs - janelaMs;
+
+
+            const progresso =
+                (
+                    (
+                        agoraMs -
+                        inicioContagemMs
+                    ) /
+                    janelaMs
+                ) * 100;
+
+
+            const progressoLimitado =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        progresso
+                    )
+                );
+
+
+            barra.style.width =
+                `${progressoLimitado}%`;
+
+
+            atualizarAcessibilidade(
+                progressBg,
+                progressoLimitado
+            );
+
+
+            return;
+        }
+
+
+        /*
+         * ========================================================
+         * ESTADO 2
+         * ATENDIMENTO EM ANDAMENTO
+         * ========================================================
+         */
+
+        if (
+            agoraMs >= inicioMs &&
+            agoraMs < fimMs
+        ) {
+
+            const restanteMs =
+                fimMs - agoraMs;
+
+
+            const restanteSegundos =
+                restanteMs / 1000;
+
+
+            timer.innerHTML =
+                '<i class="fas fa-clock"></i> ' +
+                'Atendimento em andamento · ' +
+                'termina em ' +
+                formatarTempo(
+                    restanteSegundos
+                );
+
+
+            /*
+             * ----------------------------------------------------
+             * PROGRESSO REAL DO ATENDIMENTO
+             * ----------------------------------------------------
+             *
+             * Aqui usamos:
+             *
+             * hora_marcada → hora_fim
+             *
+             * Portanto:
+             *
+             * 08:00 → 08:40 = 40 minutos
+             *
+             * 08:00 → 08:10 = 10 minutos
+             *
+             * 09:30 → 10:10 = 40 minutos
+             */
+
+            const duracaoMs =
+                fimMs - inicioMs;
+
+
+            const decorridoMs =
+                agoraMs - inicioMs;
+
+
+            const progresso =
+                (
+                    decorridoMs /
+                    duracaoMs
+                ) * 100;
+
+
+            const progressoLimitado =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        progresso
+                    )
+                );
+
+
+            barra.style.width =
+                `${progressoLimitado}%`;
+
+
+            atualizarAcessibilidade(
+                progressBg,
+                progressoLimitado
+            );
+
+
+            return;
+        }
+
+
+        /*
+         * ========================================================
+         * ESTADO 3
+         * ATENDIMENTO ENCERRADO
+         * ========================================================
+         *
+         * Aqui não existe mais contagem regressiva.
+         *
+         * A barra fica em 100% porque o atendimento
+         * consumiu toda a duração prevista.
+         */
+
+        timer.innerHTML =
+            '<i class="fas fa-check"></i> ' +
+            'Atendimento encerrado';
+
+
+        barra.style.width =
+            '100%';
+
+
+        atualizarAcessibilidade(
+            progressBg,
+            100
+        );
+    }
+
+
+    /*
+     * ============================================================
+     * INICIA TODOS OS CONTADORES
+     * ============================================================
+     */
+
+    function iniciarContadores() {
+
+        const containers =
+            Array.from(
+                document.querySelectorAll(
+                    '.countdown-container[data-id]'
+                )
+            );
+
+
+        /*
+         * Não existe contador nessa página.
+         */
+
+        if (!containers.length) {
+            return;
+        }
+
+
+        /*
+         * Atualiza imediatamente.
+         */
+
+        function atualizarTodos() {
+
+            containers.forEach(
+                function (container) {
+
+                    atualizarContador(
+                        container
+                    );
+
+                }
+            );
+        }
+
+
+        atualizarTodos();
+
+
+        /*
+         * Atualiza a cada segundo.
+         */
+
+        const intervalo =
+            window.setInterval(
+                atualizarTodos,
+                INTERVALO_ATUALIZACAO
+            );
+
+
+        window.mySchedulesCountdownInterval =
+            intervalo;
+    }
+
+
+    /*
+     * ============================================================
+     * INICIALIZAÇÃO
+     * ============================================================
+     */
+
+    if (
+        document.readyState === 'loading'
+    ) {
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            iniciarContadores,
+            {
+                once: true
+            }
+        );
+
+    } else {
+
+        iniciarContadores();
+
+    }
+
+})();
+</script>

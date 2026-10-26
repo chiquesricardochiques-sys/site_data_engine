@@ -1,0 +1,374 @@
+<div class="details-page">
+
+    <div class="details-content">
+
+        <a
+            href="/client/my-schedules"
+            class="details-back"
+        >
+            <i class="fas fa-arrow-left"></i>
+            Meus agendamentos
+        </a>
+
+        {{#if erro}}
+
+            <div class="details-erro">
+
+                <i class="fas fa-exclamation-circle"></i>
+
+                <p>
+                    {{erro}}
+                </p>
+
+                <a
+                    href="/client/my-schedules"
+                    class="details-btn"
+                >
+                    Voltar para meus agendamentos
+                </a>
+
+            </div>
+
+        {{else}}
+
+            {{#with agendamento}}
+
+                <!-- =====================================================
+                     CABEÇALHO
+                ====================================================== -->
+
+                <div class="details-header">
+
+                    <h1 class="details-title">
+                        Detalhes do agendamento
+                    </h1>
+
+                    {{#if status_label}}
+
+                        <span class="details-badge">
+                            {{status_label}}
+                        </span>
+
+                    {{/if}}
+
+                </div>
+
+
+                <!-- =====================================================
+                     QUANDO
+                ====================================================== -->
+
+                <section class="details-card">
+
+                    <span class="details-label">
+                        Quando
+                    </span>
+
+                    {{#if dia_semana}}
+
+                        <p class="details-data">
+                            {{dia_semana}},
+                            {{data_fmt}}
+                        </p>
+
+                    {{else}}
+
+                        <p class="details-data">
+                            {{data_fmt}}
+                        </p>
+
+                    {{/if}}
+
+                    <p class="details-hora">
+
+                        {{hora}}
+
+                        {{#if hora_fim}}
+                            às {{hora_fim}}
+                        {{/if}}
+
+                        {{#if duracao_fmt}}
+
+                            <span class="details-muted">
+                                ({{duracao_fmt}})
+                            </span>
+
+                        {{/if}}
+
+                    </p>
+
+                </section>
+
+
+                <!-- =====================================================
+                     PROFISSIONAL
+                ====================================================== -->
+
+                <section class="details-card">
+
+                    <span class="details-label">
+                        Profissional
+                    </span>
+
+                    <div class="details-pessoa">
+
+                        {{#if profissional.foto_url}}
+
+                            <img
+                                class="details-avatar"
+                                src="{{profissional.foto_url}}"
+                                alt="{{profissional.nome}}"
+                                loading="lazy"
+                            >
+
+                        {{else}}
+
+                            <span class="details-avatar details-avatar-vazio">
+                                {{profissional.inicial}}
+                            </span>
+
+                        {{/if}}
+
+                        <div>
+
+                            <p class="details-nome">
+                                {{profissional.nome}}
+                            </p>
+
+                            {{#if profissional.especialidade}}
+
+                                <p class="details-muted">
+                                    {{profissional.especialidade}}
+                                </p>
+
+                            {{/if}}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =====================================================
+                     SERVIÇOS
+                ====================================================== -->
+
+                <section class="details-card">
+
+                    <span class="details-label">
+                        Serviços
+                    </span>
+
+                    {{#if servicos.length}}
+
+                        <ul class="details-servicos">
+
+                            {{#each servicos}}
+
+                                <li class="details-servico">
+
+                                    {{#if this.foto_url}}
+
+                                        <img
+                                            class="details-servico-img"
+                                            src="{{this.foto_url}}"
+                                            alt="{{this.nome}}"
+                                            loading="lazy"
+                                        >
+
+                                    {{else}}
+
+                                        <span class="details-servico-img details-servico-vazio">
+                                            <i class="fas fa-cut"></i>
+                                        </span>
+
+                                    {{/if}}
+
+                                    <div class="details-servico-info">
+
+                                        <p class="details-nome">
+
+                                            {{this.qtd_label}}
+                                            {{this.nome}}
+
+                                        </p>
+
+                                        {{#if this.duracao_fmt}}
+
+                                            <p class="details-muted">
+                                                {{this.duracao_fmt}}
+                                            </p>
+
+                                        {{/if}}
+
+                                    </div>
+
+                                    <span class="details-preco">
+                                        R$ {{this.subtotal_fmt}}
+                                    </span>
+
+                                </li>
+
+                            {{/each}}
+
+                        </ul>
+
+                    {{else}}
+
+                        <p class="details-muted">
+                            Nenhum serviço encontrado.
+                        </p>
+
+                    {{/if}}
+
+
+                    <!-- Total -->
+
+                    <div class="details-total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            R$ {{preco_total_fmt}}
+                        </strong>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =====================================================
+                     OBSERVAÇÃO
+                ====================================================== -->
+
+                {{#if observacao}}
+
+                    <section class="details-card">
+
+                        <span class="details-label">
+                            Sua observação
+                        </span>
+
+                        <p class="details-obs">
+                            {{observacao}}
+                        </p>
+
+                    </section>
+
+                {{/if}}
+
+
+                <!-- =====================================================
+                     LOCAL
+                ====================================================== -->
+
+                <section class="details-card">
+
+                    <span class="details-label">
+                        Local
+                    </span>
+
+                    {{#if salao.nome}}
+
+                        <p class="details-nome">
+                            {{salao.nome}}
+                        </p>
+
+                    {{/if}}
+
+                    {{#if salao.local}}
+
+                        <p class="details-muted">
+                            {{salao.local}}
+                        </p>
+
+                    {{/if}}
+
+
+                    <!-- Contatos -->
+
+                    {{#if salao.whatsapp_link}}
+
+                        <div class="details-contatos">
+
+                            <a
+                                href="{{salao.whatsapp_link}}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="details-btn details-btn-contorno"
+                            >
+                                <i class="fab fa-whatsapp"></i>
+                                WhatsApp
+                            </a>
+
+                            {{#if salao.telefone_link}}
+
+                                <a
+                                    href="{{salao.telefone_link}}"
+                                    class="details-btn details-btn-contorno"
+                                >
+                                    <i class="fas fa-phone"></i>
+                                    Ligar
+                                </a>
+
+                            {{/if}}
+
+                        </div>
+
+                    {{else}}
+
+                        {{#if salao.telefone_link}}
+
+                            <div class="details-contatos">
+
+                                <a
+                                    href="{{salao.telefone_link}}"
+                                    class="details-btn details-btn-contorno"
+                                >
+                                    <i class="fas fa-phone"></i>
+                                    Ligar
+                                </a>
+
+                            </div>
+
+                        {{/if}}
+
+                    {{/if}}
+
+                </section>
+
+
+                <!-- =====================================================
+                     SOLICITADO EM
+                ====================================================== -->
+
+                {{#if criado_em_fmt}}
+
+                    <p class="details-rodape">
+                        Solicitado em {{criado_em_fmt}}
+                    </p>
+
+                {{/if}}
+
+
+                <!-- =====================================================
+                     VOLTAR
+                ====================================================== -->
+
+                <a
+                    href="/client/my-schedules"
+                    class="details-btn"
+                >
+                    Voltar
+                </a>
+
+            {{/with}}
+
+        {{/if}}
+
+    </div>
+
+</div>

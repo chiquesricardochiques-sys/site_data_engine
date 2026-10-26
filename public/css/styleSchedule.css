@@ -28,7 +28,7 @@
     background: var(--bg-screen);
     color: var(--text);
     box-sizing: border-box;
-    overflow: hidden;
+    overflow-x: clip;
     width: 100%;
 }
 
@@ -68,6 +68,9 @@
 }
 
 /* ---------------- TÍTULOS DE SEÇÃO ---------------- */
+form {
+    overflow-x: hidden;
+}
 
 .schedule-page .sel-section {
     margin-bottom: 10px;
@@ -97,6 +100,7 @@
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    /* overflow-x: hidden; */
 }
 
 .schedule-page .h-scroll::-webkit-scrollbar {
@@ -124,8 +128,9 @@
     cursor: pointer;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
-
+.svc-input
 .schedule-page .svc-card {
+    position: relative;
     display: block;
     flex: 0 0 auto;
     cursor: pointer;
@@ -226,9 +231,19 @@
     opacity: 1;
 }
 
+/* checkbox real escondido: o card é o controle
+.schedule-page .svc-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+} */
 /* checkbox real escondido: o card é o controle */
 .schedule-page .svc-input {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 1px;
     height: 1px;
     opacity: 0;

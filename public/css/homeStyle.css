@@ -1,3 +1,4 @@
+/* @import URL("./styleMySchedules.css"); */
 /* ============================================================
    HOME DO CLIENTE
    Mesmos valores (cores, tamanhos, espaçamentos) do app mobile.
@@ -46,49 +47,140 @@
 
 /* ---------------- STATUS CARD ---------------- */
 
+/* ============================================================
+   ETAPA 1: STATUS WRAP & SECTION TITLE (MINIMALISTA)
+   ============================================================ */
+
 .client-home .status-wrap {
     width: 100%;
-    margin-bottom: 16px;
-    padding: 0 16px;
+    margin-bottom: 12px;
+    padding: 0 12px;
 }
 
 .client-home .section-title {
-    margin: 0 0 8px;
-    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 6px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: 1.2px;
     text-transform: uppercase;
-    color: var(--text-main);
+    color: var(--text-secondary);
 }
 
-.client-home .status-card {
-    width: 100%;
-    padding: 16px;
-    border-radius: 12px;
-    background: var(--bg-card);
+/* Detalhe minimalista: um ponto indicador com a cor da marca */
+.client-home .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--brand);
 }
+
+/* ============================================================
+   ETAPA 2: STATUS CARD (TÉCNICA BEFORE + AFTER MASCARADO)
+   ============================================================ */
+
+.client-home .status-card {
+    position: relative;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    background: transparent; /* Fundo transparente pois o ::after será a máscara */
+    overflow: visible; /* Deixa a aura do ::before vazar */
+    z-index: 1;
+}
+
+/* 1. BEFORE: O Brilho/Aura Animado que fica atrás */
+.client-home .status-card::before {
+    content: '';
+    position: absolute;
+    inset: -3px; /* Vaza 3px para fora de todas as bordas */
+    border-radius: 15px;
+    
+    /* Gradiente vibrante para o efeito de borda iluminada */
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.7), rgba(255, 193, 7, 0.15));
+    
+    filter: blur(8px); /* Deixa a aura suave */
+    animation: borderGlowPulse 4s ease-in-out infinite alternate;
+    z-index: -2; /* Fica no fundo de tudo */
+    pointer-events: none;
+}
+
+/* 2. AFTER: O Miolo do Card que esconde o brilho no centro */
+/* 2. AFTER: O Miolo do Card em 3D que esconde o brilho no centro */
+.client-home .status-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    
+    /* Gradiente cinza diagonal mais marcado para profundidade 3D */
+    background: linear-gradient(145deg, #282c34 0%, #121418 100%);
+    
+    /* Borda muito sutil em toda a volta */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    
+    /* RELEVO 3D: 
+       1. Linha de luz branca no topo/esquerda (highlights)
+       2. Sombra escura profunda embaixo/direita (depth)
+       3. Sombra projetada para fora sobre a luz do fundo */
+    box-shadow: 
+        inset 1px 1px 1px rgba(255, 255, 255, 0.2),  /* Luz alta no topo/esquerda */
+        inset -2px -2px 4px rgba(0, 0, 0, 0.8),       /* Sombreamento embaixo/direita */
+        0 10px 25px rgba(0, 0, 0, 0.6);               /* Sombra externa trazendo o card pra frente */
+                
+    z-index: -1; /* Fica acima do ::before e abaixo do texto */
+    pointer-events: none;
+}
+
+/* Animação que faz a borda "respirar" */
+@keyframes borderGlowPulse {
+    0% {
+        opacity: 0.1;
+        filter: blur(5px);
+    }
+    100% {
+        opacity: 0.4;
+        filter: blur(10px);
+    }
+}
+
+
+
+
+
+/* ============================================================
+   ETAPA 3: STATUS HEADER, GREETING & BADGE
+   ============================================================ */
 
 .client-home .status-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .client-home .greeting {
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
     color: var(--text-main);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* Sutil relevo no texto */
 }
 
+/* Etiqueta de status estilo "Pílula" moderna */
 .client-home .status-badge {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 3px 8px;
-    border: 0;
-    border-radius: 12px;
-    background: transparent;
+    gap: 5px;
+    padding: 4px 9px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.35); /* Fundo escuro translúcido */
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Borda bem delicada */
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
     font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.5px;
@@ -97,13 +189,36 @@
 }
 
 .client-home .status-badge i {
-    font-size: 10px;
+    font-size: 9px;
     color: var(--brand);
 }
 
-.client-home .status-badge.status-confirmado { color: var(--success); }
-.client-home .status-badge.status-concluido  { color: var(--success); }
-.client-home .status-badge.status-cancelado  { color: var(--danger); }
+/* Variações de cor da pílula conforme o status do agendamento */
+.client-home .status-badge.status-confirmado { 
+    color: var(--success); 
+    border-color: rgba(143, 209, 158, 0.25);
+    background: rgba(143, 209, 158, 0.08);
+}
+
+.client-home .status-badge.status-concluido { 
+    color: var(--success); 
+    border-color: rgba(143, 209, 158, 0.25);
+    background: rgba(143, 209, 158, 0.08);
+}
+
+.client-home .status-badge.status-cancelado { 
+    color: var(--danger); 
+    border-color: rgba(220, 119, 119, 0.25);
+    background: rgba(220, 119, 119, 0.08);
+}
+
+
+
+
+
+
+
+
 
 .client-home .status-details {
     margin-bottom: 12px;
@@ -138,7 +253,7 @@
     color: var(--text-secondary);
 }
 
-/* contador regressivo */
+/* // contador regressivo  */
 .client-home .countdown {
     margin-bottom: 12px;
     padding: 10px;
@@ -175,7 +290,7 @@
     transition: width 0.4s linear;
 }
 
-/* botão primário: ghost (transparente, borda amarela) */
+/* // botão primário: ghost (transparente, borda amarela)  */
 .client-home .ghost-btn {
     display: flex;
     align-items: center;

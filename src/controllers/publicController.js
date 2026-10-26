@@ -15,9 +15,9 @@ function logoutCliente(req, res) {
 }
 
 
-// ============================================================
-// CADASTRO
-// ============================================================
+// // ============================================================
+// // CADASTRO
+// // ============================================================
 
 async function mostrarCadastro(req, res) {
     return res.render('public/register', {
@@ -29,6 +29,227 @@ async function mostrarCadastro(req, res) {
     });
 }
 
+
+// ============================================================
+// LOGIN
+// ============================================================
+
+async function mostrarLogin(req, res) {
+    return res.render('public/login', {
+        page: 'login',
+        register: true,
+        navbarPublic: true
+    });
+}
+
+
+// Garante a relação do cliente no Go (id + telefone).
+//
+// É idempotente: se a relação já existe, o Go devolve a mesma e só
+// atualiza o telefone quando ele veio preenchido. Nunca lança erro,
+// porque uma falha aqui não pode impedir o login.
+async function garantirRelacaoCliente(usuario) {
+    try {
+        await salaoApi.adicionarRelacaoCliente(
+            usuario.id,
+            usuario.telefone
+        );
+    } catch (erro) {
+        console.error(
+            'Erro ao registrar relação do cliente:',
+            {
+                auth_user_id: usuario.id,
+                status: erro.status,
+                message: erro.message
+            }
+        );
+
+        // Telefone fora do padrão (400): cria ao menos a relação com o id,
+        // para o cliente não ficar sem vínculo por causa do telefone.
+        if (erro.status === 400 && usuario.telefone) {
+            try {
+                await salaoApi.adicionarRelacaoCliente(usuario.id);
+            } catch (erroSemTelefone) {
+                console.error(
+                    'Erro ao registrar relação do cliente (sem telefone):',
+                    {
+                        auth_user_id: usuario.id,
+                        status: erroSemTelefone.status,
+                        message: erroSemTelefone.message
+                    }
+                );
+            }
+        }
+    }
+}
+
+
+async function loginCliente(req, res) {
+    const email = String(
+        req.body.email || ''
+    ).trim().toLowerCase();
+
+    const senha = String(
+        req.body.senha || ''
+    );
+
+    try {
+        if (!email || !senha) {
+            return res.status(400).render(
+                'public/login',
+                {
+                    layout: 'client',
+                    page: 'login',
+                    error: 'Informe seu e-mail e sua senha.',
+                    navbarPublic: true
+                }
+            );
+        }
+
+        // ----------------------------------------------------
+        // 1. Autentica na API central de autenticação
+        // ----------------------------------------------------
+
+        const result = await authService.login(
+            email,
+            senha
+        );
+
+        if (
+            !result ||
+            result.success !== true ||
+            !result.user
+        ) {
+            return res.status(401).render(
+                'public/login',
+                {
+                    layout: 'client',
+                    page: 'login',
+                    error:
+                        'Não foi possível entrar. Verifique seus dados.',
+                    navbarPublic: true
+                }
+            );
+        }
+
+        const usuario = result.user;
+
+        // ----------------------------------------------------
+        // 2. Verifica o estado da conta
+        // ----------------------------------------------------
+
+        if (
+            usuario.status !== 'ativo' ||
+            usuario.email_verificado !== true
+        ) {
+            return res.status(403).render(
+                'public/login',
+                {
+                    layout: 'client',
+                    page: 'login',
+                    error:
+                        'Sua conta precisa estar ativa e com o e-mail confirmado.',
+                    navbarPublic: true
+                }
+            );
+        }
+
+        // ----------------------------------------------------
+        // 3. Cria uma nova sessão
+        // ----------------------------------------------------
+
+        await new Promise((resolve, reject) => {
+            req.session.regenerate((erro) => {
+                if (erro) {
+                    return reject(erro);
+                }
+
+                resolve();
+            });
+        });
+
+        // ----------------------------------------------------
+        // 4. Guarda os dados do usuário na sessão
+        //
+        // A API Auth atualmente retorna:
+        //
+        // user.id
+        // user.nome
+        // user.email
+        // user.telefone
+        // user.status
+        // user.email_verificado
+        //
+        // Não inventamos access_token nem id_cliente,
+        // porque eles não vieram na resposta apresentada.
+        // ----------------------------------------------------
+
+        req.session.cliente = {
+            auth_user_id: usuario.id,
+            nome: usuario.nome,
+            email: usuario.email,
+            telefone: usuario.telefone || '',
+            status: usuario.status,
+            email_verificado: usuario.email_verificado
+        };
+
+        // ----------------------------------------------------
+        // 5. Salva a sessão
+        // ----------------------------------------------------
+
+        await new Promise((resolve, reject) => {
+            req.session.save((erroSalvar) => {
+                if (erroSalvar) {
+                    return reject(erroSalvar);
+                }
+
+                resolve();
+            });
+        });
+
+        // ----------------------------------------------------
+        // 6. Envia id + telefone para a API Go (relação do cliente)
+        //
+        // Não bloqueia o login: se o Go falhar, o erro vai só para o log.
+        // ----------------------------------------------------
+
+        await garantirRelacaoCliente(usuario);
+
+        // ----------------------------------------------------
+        // 7. Login concluído
+        // ----------------------------------------------------
+
+        return res.redirect('/');
+
+    } catch (error) {
+        console.error(
+            'Erro ao autenticar cliente:',
+            {
+                status: error.status,
+                message: error.message,
+                data: error.data
+            }
+        );
+
+        const status =
+            error.status === 401
+                ? 401
+                : 500;
+
+        return res.status(status).render(
+            'public/login',
+            {
+                layout: 'client',
+                page: 'login',
+                error:
+                    error.status === 401
+                        ? 'E-mail ou senha inválidos.'
+                        : 'Erro ao realizar login. Tente novamente.',
+                navbarPublic: true
+            }
+        );
+    }
+}
 
 async function registrarCliente(req, res) {
     const { nome, email, telefone, senha } = req.body;
@@ -227,173 +448,173 @@ async function validarEmail(req, res) {
 // LOGIN
 // ============================================================
 
-async function mostrarLogin(req, res) {
-    return res.render('public/login', {
-        page: 'login',
-        register: true,
-        navbarPublic: true
-    });
-}
+// async function mostrarLogin(req, res) {
+//     return res.render('public/login', {
+//         page: 'login',
+//         register: true,
+//         navbarPublic: true
+//     });
+// }
 
 
-async function loginCliente(req, res) {
-    const email = String(
-        req.body.email || ''
-    ).trim().toLowerCase();
+// async function loginCliente(req, res) {
+//     const email = String(
+//         req.body.email || ''
+//     ).trim().toLowerCase();
 
-    const senha = String(
-        req.body.senha || ''
-    );
+//     const senha = String(
+//         req.body.senha || ''
+//     );
 
-    try {
-        if (!email || !senha) {
-            return res.status(400).render(
-                'public/login',
-                {
-                    layout: 'client',
-                    page: 'login',
-                    error: 'Informe seu e-mail e sua senha.',
-                    navbarPublic: true
-                }
-            );
-        }
+//     try {
+//         if (!email || !senha) {
+//             return res.status(400).render(
+//                 'public/login',
+//                 {
+//                     layout: 'client',
+//                     page: 'login',
+//                     error: 'Informe seu e-mail e sua senha.',
+//                     navbarPublic: true
+//                 }
+//             );
+//         }
 
-        // ----------------------------------------------------
-        // 1. Autentica na API central de autenticação
-        // ----------------------------------------------------
+//         // ----------------------------------------------------
+//         // 1. Autentica na API central de autenticação
+//         // ----------------------------------------------------
 
-        const result = await authService.login(
-            email,
-            senha
-        );
+//         const result = await authService.login(
+//             email,
+//             senha
+//         );
 
-        if (
-            !result ||
-            result.success !== true ||
-            !result.user
-        ) {
-            return res.status(401).render(
-                'public/login',
-                {
-                    layout: 'client',
-                    page: 'login',
-                    error:
-                        'Não foi possível entrar. Verifique seus dados.',
-                    navbarPublic: true
-                }
-            );
-        }
+//         if (
+//             !result ||
+//             result.success !== true ||
+//             !result.user
+//         ) {
+//             return res.status(401).render(
+//                 'public/login',
+//                 {
+//                     layout: 'client',
+//                     page: 'login',
+//                     error:
+//                         'Não foi possível entrar. Verifique seus dados.',
+//                     navbarPublic: true
+//                 }
+//             );
+//         }
 
-        const usuario = result.user;
+//         const usuario = result.user;
 
-        // ----------------------------------------------------
-        // 2. Verifica o estado da conta
-        // ----------------------------------------------------
+//         // ----------------------------------------------------
+//         // 2. Verifica o estado da conta
+//         // ----------------------------------------------------
 
-        if (
-            usuario.status !== 'ativo' ||
-            usuario.email_verificado !== true
-        ) {
-            return res.status(403).render(
-                'public/login',
-                {
-                    layout: 'client',
-                    page: 'login',
-                    error:
-                        'Sua conta precisa estar ativa e com o e-mail confirmado.',
-                    navbarPublic: true
-                }
-            );
-        }
+//         if (
+//             usuario.status !== 'ativo' ||
+//             usuario.email_verificado !== true
+//         ) {
+//             return res.status(403).render(
+//                 'public/login',
+//                 {
+//                     layout: 'client',
+//                     page: 'login',
+//                     error:
+//                         'Sua conta precisa estar ativa e com o e-mail confirmado.',
+//                     navbarPublic: true
+//                 }
+//             );
+//         }
 
-        // ----------------------------------------------------
-        // 3. Cria uma nova sessão
-        // ----------------------------------------------------
+//         // ----------------------------------------------------
+//         // 3. Cria uma nova sessão
+//         // ----------------------------------------------------
 
-        await new Promise((resolve, reject) => {
-            req.session.regenerate((erro) => {
-                if (erro) {
-                    return reject(erro);
-                }
+//         await new Promise((resolve, reject) => {
+//             req.session.regenerate((erro) => {
+//                 if (erro) {
+//                     return reject(erro);
+//                 }
 
-                resolve();
-            });
-        });
+//                 resolve();
+//             });
+//         });
 
-        // ----------------------------------------------------
-        // 4. Guarda os dados do usuário na sessão
-        //
-        // A API Auth atualmente retorna:
-        //
-        // user.id
-        // user.nome
-        // user.email
-        // user.telefone
-        // user.status
-        // user.email_verificado
-        //
-        // Não inventamos access_token nem id_cliente,
-        // porque eles não vieram na resposta apresentada.
-        // ----------------------------------------------------
+//         // ----------------------------------------------------
+//         // 4. Guarda os dados do usuário na sessão
+//         //
+//         // A API Auth atualmente retorna:
+//         //
+//         // user.id
+//         // user.nome
+//         // user.email
+//         // user.telefone
+//         // user.status
+//         // user.email_verificado
+//         //
+//         // Não inventamos access_token nem id_cliente,
+//         // porque eles não vieram na resposta apresentada.
+//         // ----------------------------------------------------
 
-        req.session.cliente = {
-            auth_user_id: usuario.id,
-            nome: usuario.nome,
-            email: usuario.email,
-            telefone: usuario.telefone || '',
-            status: usuario.status,
-            email_verificado: usuario.email_verificado
-        };
+//         req.session.cliente = {
+//             auth_user_id: usuario.id,
+//             nome: usuario.nome,
+//             email: usuario.email,
+//             telefone: usuario.telefone || '',
+//             status: usuario.status,
+//             email_verificado: usuario.email_verificado
+//         };
 
-        // ----------------------------------------------------
-        // 5. Salva a sessão
-        // ----------------------------------------------------
+//         // ----------------------------------------------------
+//         // 5. Salva a sessão
+//         // ----------------------------------------------------
 
-        await new Promise((resolve, reject) => {
-            req.session.save((erroSalvar) => {
-                if (erroSalvar) {
-                    return reject(erroSalvar);
-                }
+//         await new Promise((resolve, reject) => {
+//             req.session.save((erroSalvar) => {
+//                 if (erroSalvar) {
+//                     return reject(erroSalvar);
+//                 }
 
-                resolve();
-            });
-        });
+//                 resolve();
+//             });
+//         });
 
-        // ----------------------------------------------------
-        // 6. Login concluído
-        // ----------------------------------------------------
+//         // ----------------------------------------------------
+//         // 6. Login concluído
+//         // ----------------------------------------------------
 
-        return res.redirect('/');
+//         return res.redirect('/');
 
-    } catch (error) {
-        console.error(
-            'Erro ao autenticar cliente:',
-            {
-                status: error.status,
-                message: error.message,
-                data: error.data
-            }
-        );
+//     } catch (error) {
+//         console.error(
+//             'Erro ao autenticar cliente:',
+//             {
+//                 status: error.status,
+//                 message: error.message,
+//                 data: error.data
+//             }
+//         );
 
-        const status =
-            error.status === 401
-                ? 401
-                : 500;
+//         const status =
+//             error.status === 401
+//                 ? 401
+//                 : 500;
 
-        return res.status(status).render(
-            'public/login',
-            {
-                layout: 'client',
-                page: 'login',
-                error:
-                    error.status === 401
-                        ? 'E-mail ou senha inválidos.'
-                        : 'Erro ao realizar login. Tente novamente.',
-                navbarPublic: true
-            }
-        );
-    }
-}
+//         return res.status(status).render(
+//             'public/login',
+//             {
+//                 layout: 'client',
+//                 page: 'login',
+//                 error:
+//                     error.status === 401
+//                         ? 'E-mail ou senha inválidos.'
+//                         : 'Erro ao realizar login. Tente novamente.',
+//                 navbarPublic: true
+//             }
+//         );
+//     }
+// }
 
 
 // ============================================================

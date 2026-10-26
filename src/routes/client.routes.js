@@ -17,6 +17,7 @@ router.get('/', clientController.home);
 
 // AJAX - horários disponíveis
 router.get('/ajax/horarios', clientController.horariosAjax);
+router.post('/client/schedule/servicos', clientController.servicosAjax);
 
 // Agendamento
 router.get('/schedule', clientController.mostrarAgendamento);
@@ -26,6 +27,7 @@ router.post('/schedule', clientController.agendarHorario);
 router.get('/my-schedules', clientController.meusAgendamentos);
 router.get('/my-schedules/history', clientController.historicoAgendamentos);
 router.post('/my-schedules/delete', clientController.deletarAgendamento);
+router.get('/my-schedules/details/:id', clientController.mostrarDados);
 
 // Perfil
 router.get('/profile', clientController.mostrarPerfil);

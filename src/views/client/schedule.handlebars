@@ -136,6 +136,7 @@
     const datesScroll = document.getElementById('datesScroll');
     const horariosSection = document.getElementById('horariosSection');
     const horariosGrid = document.getElementById('horariosGrid');
+    const servicosScroll = document.getElementById('servicosScroll');
     const summaryText = document.getElementById('summaryText');
     const erroCliente = document.getElementById('erroCliente');
     const confirmBtn = document.getElementById('confirmBtn');
@@ -205,7 +206,7 @@
         await carregarHorarios();
     }
 
-    // ---------- profissional ----------
+    // ---------- profissional & serviços ----------
 
     profissionaisScroll.addEventListener('click', async (e) => {
         const card = e.target.closest('.pro-card');
@@ -215,8 +216,69 @@
         [...profissionaisScroll.querySelectorAll('.pro-card')]
             .forEach(c => c.classList.toggle('selected', c === card));
 
+        // 1. Busca e atualiza os serviços exclusivos do profissional selecionado
+        await carregarServicosDoProfissional(card.dataset.id);
+
+        // 2. Atualiza os horários disponíveis para a data e o novo profissional
         await carregarHorarios();
     });
+
+    async function carregarServicosDoProfissional(profissionalId) {
+        try {
+            const res = await fetch('/client/schedule/servicos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ profissional_id: profissionalId })
+            });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const json = await res.json();
+
+            if (json.success && json.servicos) {
+                renderizarServicos(json.servicos);
+            }
+        } catch (err) {
+            console.error('Erro ao carregar serviços do profissional:', err);
+        }
+    }
+
+    function renderizarServicos(servicos) {
+        servicosScroll.innerHTML = '';
+        if (!servicos.length) {
+            servicosScroll.innerHTML = '<p class="empty-text">Nenhum serviço disponível para este profissional.</p>';
+            atualizarResumo();
+            return;
+        }
+
+        servicos.forEach(servico => {
+            const label = document.createElement('label');
+            label.className = 'svc-card';
+            label.dataset.nome = servico.nome;
+            label.dataset.duracao = servico.duracao_minutos;
+            label.dataset.preco = servico.preco;
+
+            const fotoHtml = servico.foto_url 
+                ? `<img class="pro-img" src="${servico.foto_url}" alt="${servico.nome}" loading="lazy">` 
+                : `<span class="no-photo">Sem foto</span>`;
+
+            label.innerHTML = `
+                <input class="svc-input"
+                       type="checkbox"
+                       name="servico_id"
+                       value="${servico.id}">
+                <span class="svc-face">
+                    ${fotoHtml}
+                    <span class="name-pill">
+                        <span class="name-text">${servico.nome}</span>
+                        <span class="dur-text">${servico.duracao_minutos} min</span>
+                    </span>
+                    <span class="check-badge">✓</span>
+                </span>
+            `;
+            servicosScroll.appendChild(label);
+        });
+
+        atualizarResumo();
+    }
 
     // ---------- horários ----------
 
@@ -228,7 +290,6 @@
         horariosGrid.appendChild(p);
     }
 
-    // disponivel=false: motivo "agendado" (já tem cliente) ou "bloqueado"
     function desenharHorarios(horarios) {
         horariosSection.hidden = !usaHorarios;
         horariosGrid.innerHTML = '';
@@ -285,7 +346,6 @@
         }
     }
 
-    // um único listener serve os cards vindos do servidor e do JS
     horariosGrid.addEventListener('click', (e) => {
         const card = e.target.closest('.hour-card');
         if (!card || card.classList.contains('disabled')) return;
@@ -330,11 +390,12 @@
             ' • R$ ' + precoTotal.toFixed(2).replace('.', ',');
     }
 
-    document.querySelectorAll('.svc-input').forEach(cb => {
-        cb.addEventListener('change', () => {
+    // Delegação de eventos no formulário para tratar os checkboxes gerados dinamicamente
+    form.addEventListener('change', (e) => {
+        if (e.target.classList.contains('svc-input')) {
             limparErro();
             atualizarResumo();
-        });
+        }
     });
 
     // ---------- envio ----------

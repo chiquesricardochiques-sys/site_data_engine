@@ -2,6 +2,11 @@
    ESTILOS DE MEUS AGENDAMENTOS (Idêntico ao App)
    ============================================================ */
 
+:root {
+    --brand: #FFC107;
+    --brand-light: #ffdb4d;
+}
+
 .my-schedules-page {
     flex: 1;
     background-color: #141414;
@@ -23,7 +28,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 }
 
 .title {
@@ -40,22 +45,22 @@
     color: #ff6b6b;
     background-color: #222222;
     border: 1px solid #ff6b6b;
-    padding: 10px;
+    padding: 8px 10px;
     border-radius: 8px;
     font-size: 12px;
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .alert-success {
     color: #51cf66;
     background-color: #222222;
     border: 1px solid #51cf66;
-    padding: 10px;
+    padding: 8px 10px;
     border-radius: 8px;
     font-size: 12px;
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 /* Alternador de Cenários */
@@ -74,7 +79,7 @@
     align-items: center;
     justify-content: center;
     gap: 7px;
-    padding: 10px 0;
+    padding: 8px 0;
     border-radius: 7px;
     text-decoration: none;
     transition: background-color 0.2s;
@@ -86,7 +91,7 @@
 }
 
 .cenario-button-ativo {
-    background-color: #FFC107;
+    background-color: var(--brand);
 }
 
 .cenario-button-ativo i {
@@ -118,14 +123,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 9px 0;
+    padding: 8px 0;
     border-radius: 7px;
     text-decoration: none;
     transition: background-color 0.2s;
 }
 
 .filtro-tab-button-ativo {
-    background-color: #FFC107;
+    background-color: var(--brand);
 }
 
 .filtro-tab-button-text {
@@ -147,46 +152,64 @@
     margin-bottom: 70px;
 }
 
+/* Card Minimalista com Degradê Sutil e Box-Shadow 3D */
 .card {
-    background-color: #222222;
+    background: linear-gradient(145deg, #242424 0%, #1a1a1a 100%);
     border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 12px;
-    border: 1px solid #333333;
+    padding: 14px;
+    margin-bottom: 10px;
+    border: 1px solid #323232;
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 6px 16px rgba(0, 0, 0, 0.4),
+        0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    border-color: #444444;
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 8px 20px rgba(0, 0, 0, 0.5),
+        0 3px 6px rgba(0, 0, 0, 0.25);
 }
 
 .card-cancelado {
     opacity: 0.5;
+    background: linear-gradient(145deg, #1d1d1d 0%, #161616 100%);
 }
 
 .card-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .data-texto {
     color: #FFFFFF;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
+    letter-spacing: -0.2px;
 }
 
 /* Pílula de Status */
 .status-pill {
     padding: 3px 8px;
     border-radius: 6px;
-    border: 1px solid #FFC107;
+    border: 1px solid var(--brand);
+    background-color: rgba(255, 193, 7, 0.06);
 }
-.status-pill-agendado { border-color: #FFC107; }
-.status-pill-concluido { border-color: #51cf66; }
-.status-pill-cancelado { border-color: #ff6b6b; }
+.status-pill-agendado { border-color: var(--brand); background-color: rgba(255, 193, 7, 0.08); }
+.status-pill-concluido { border-color: #51cf66; background-color: rgba(81, 207, 102, 0.08); }
+.status-pill-cancelado { border-color: #ff6b6b; background-color: rgba(255, 107, 107, 0.08); }
 
 .status-pill-text {
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
-    color: #FFC107;
+    letter-spacing: 0.5px;
+    color: var(--brand-light);
 }
 .status-pill-concluido .status-pill-text { color: #51cf66; }
 .status-pill-cancelado .status-pill-text { color: #ff6b6b; }
@@ -200,22 +223,23 @@
 
 .divider {
     height: 1px;
-    background-color: #333333;
-    margin-bottom: 10px;
+    background-color: #2c2c2c;
+    margin: 10px 0;
 }
 
 .sub-info-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .sub-info-label {
     display: block;
     color: #777777;
-    font-size: 10px;
+    font-size: 9px;
     text-transform: uppercase;
-    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+    margin-bottom: 1px;
 }
 
 .sub-info-value {
@@ -225,19 +249,26 @@
 }
 
 .sub-info-value-valor {
-    color: #FFC107;
+    color: var(--brand-light);
     font-size: 14px;
     font-weight: 800;
 }
 
-/* Countdown e Barra de Progresso */
+/* Countdown e Barra de Progresso Compactos */
 .countdown-container {
+    background-color: #1f1f1f;
+    border: 1px solid #292929;
+    border-radius: 7px;
+    padding: 8px 10px;
+    margin-top: 10px;
     margin-bottom: 8px;
 }
 
 .countdown-text {
-    display: block;
-    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--brand-light);
     font-size: 11px;
     font-weight: 600;
     margin-bottom: 5px;
@@ -248,42 +279,50 @@
     height: 4px;
     border-radius: 2px;
     overflow: hidden;
-    background-color: #333333;
+    background-color: #2c2c2c;
 }
 
 .progress-fill {
     height: 100%;
     border-radius: 2px;
-    background-color: #FFC107;
+    background-color: var(--brand);
+    transition: width 0.3s ease;
 }
 
 .obs-text {
     display: block;
-    color: #777777;
+    color: #888888;
     font-size: 11px;
+    margin-top: 6px;
     margin-bottom: 6px;
     font-style: italic;
+    background-color: rgba(255, 255, 255, 0.02);
+    padding: 5px 7px;
+    border-radius: 5px;
 }
 
 /* Botão de Cancelar */
 .btn-delete {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 8px;
     background: transparent;
+    display: flex;
     align-items: center;
-    padding: 10px 0;
-    border-radius: 8px;
+    justify-content: center;
+    padding: 9px 0;
+    border-radius: 7px;
     border: 1px solid #ff6b6b;
     color: #ff6b6b;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     cursor: pointer;
     text-align: center;
-    transition: background 0.2s;
+    transition: background 0.2s, color 0.2s;
 }
 
 .btn-delete:hover {
-    background-color: rgba(255, 107, 107, 0.1);
+    background-color: #ff6b6b;
+    color: #000000;
 }
 
 /* Mensagens de Vazio */
@@ -293,7 +332,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    min-height: 200px;
+    min-height: 180px;
     padding: 20px;
     border-radius: 12px;
     border: 1px solid #333333;
@@ -319,7 +358,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    min-height: 200px;
+    min-height: 180px;
     padding: 20px;
     border-radius: 12px;
     border: 1px solid #333333;
@@ -340,13 +379,43 @@
 }
 
 .btn-login {
-    margin-top: 10px;
-    padding: 11px 20px;
-    border-radius: 8px;
-    background-color: #FFC107;
+    margin-top: 8px;
+    padding: 10px 18px;
+    border-radius: 7px;
+    background-color: var(--brand);
     color: #000000;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     text-decoration: none;
     display: inline-block;
+}
+
+/* Botão de Detalhes com Laranja Mais Sutil */
+.btn-details {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 9px 0;
+    font-size: 11px;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%); /* Laranja sutil e elegante */
+    border: none;
+    border-radius: 7px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    margin-top: 8px;
+    box-shadow: 0 2px 5px rgba(217, 119, 6, 0.2);
+}
+
+.btn-details:hover {
+    background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
+    box-shadow: 0 4px 8px rgba(217, 119, 6, 0.3);
+}
+
+.btn-details i {
+    font-size: 12px;
+    color: #ffffff;
 }
