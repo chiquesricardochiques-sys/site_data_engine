@@ -231,7 +231,16 @@ header {
    FOOTER NAVIGATION
    ========================================================= */
 
+
+/* =========================================================
+   FOOTER NAVIGATION — FIXO NO NAVEGADOR
+   ========================================================= */
+
 .footer-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
     width: 100%;
 
     display: flex;
@@ -242,12 +251,16 @@ header {
 
     background: #000000;
 
-    border-top:
-        1px solid #333333;
+    border-top: 1px solid #333333;
 
-    box-shadow:
-        0 -3px 15px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.25);
+
+    z-index: 9999;
+
+    /* Respeita a área segura dos celulares */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+
 
 
 /* =========================================================
