@@ -1,13 +1,14 @@
 /* =========================================================
-   HEADER
+   HEADER — FIXO NO TOPO
    ========================================================= */
 
 header {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     z-index: 1000;
 
     width: 100%;
-    /* Reduzimos de 70px para 50px ou 55px */
     min-height: 55px; 
 
     display: flex;
@@ -16,7 +17,7 @@ header {
 
     padding: 0 22px;
 
-    background: #000000;
+    background: rgba(0, 0, 0, 0.95);
 
     border-bottom: 1px solid rgba(255, 193, 7, 0.2);
 
@@ -26,19 +27,28 @@ header {
     -webkit-backdrop-filter: blur(10px);
 }
 
-/* Lembre-se de ajustar o top do menu mobile para bater com a nova altura */
-.nav-menu {
-    position: absolute;
-    top: 55px; /* Atualizado para acompanhar a altura do header */
-    left: 0;
-    width: 100%;
-    /* ... restando do estilo igual */
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.logo {
+    display: flex;
+    align-items: center;
+
+    color: #FFC107;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
 }
 
-/* Se reduzir bastante a altura, também vale diminuir levemente a logo */
 .logo img {
     width: auto;
-    height: 32px !important; /* Ajustado de 40px para caber confortavelmente */
+    height: 32px !important;
+
     object-fit: contain;
 }
 
@@ -104,7 +114,7 @@ header {
 .nav-menu {
     position: absolute;
 
-    top: 70px;
+    top: 55px; /* Sincronizado com a altura do header fixo */
     left: 0;
 
     width: 100%;
@@ -218,11 +228,6 @@ header {
 
 
 /* =========================================================
-   FOOTER NAVIGATION
-   ========================================================= */
-
-
-/* =========================================================
    FOOTER NAVIGATION — FIXO NO NAVEGADOR
    ========================================================= */
 
@@ -250,7 +255,6 @@ header {
     /* Respeita a área segura dos celulares */
     padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-
 
 
 /* =========================================================
@@ -302,11 +306,6 @@ header {
    LABEL
    ========================================================= */
 
-/*
-   No React Native o label só aparece
-   quando o item está ativo.
-*/
-
 .footer-nav .nav-item span {
     display: none;
 
@@ -333,28 +332,13 @@ header {
     color: #FFC107;
 }
 
-
-/* =========================================================
-   LABEL DO ITEM ATIVO
-   ========================================================= */
-
 .footer-nav .nav-item.active span {
     display: block;
 }
 
-
-/* =========================================================
-   ÍCONE ATIVO
-   ========================================================= */
-
 .footer-nav .nav-item.active i {
     color: #FFFFFF;
 }
-
-
-/* =========================================================
-   INDICADOR DOURADO DO ITEM ATIVO
-   ========================================================= */
 
 .footer-nav .nav-item.active::before {
     content: "";
@@ -404,7 +388,7 @@ header {
     }
 
     .logo img {
-        height: 40px !important;
+        height: 32px !important;
     }
 
     .footer-nav .nav-item {
