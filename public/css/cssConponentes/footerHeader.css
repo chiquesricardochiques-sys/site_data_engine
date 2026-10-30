@@ -7,7 +7,8 @@ header {
     z-index: 1000;
 
     width: 100%;
-    min-height: 70px;
+    /* Reduzimos de 70px para 50px ou 55px */
+    min-height: 55px; 
 
     display: flex;
     align-items: center;
@@ -17,38 +18,27 @@ header {
 
     background: #000000;
 
-    border-bottom:
-        1px solid rgba(255, 193, 7, 0.2);
+    border-bottom: 1px solid rgba(255, 193, 7, 0.2);
 
-    box-shadow:
-        0 3px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
 
-
-/* =========================================================
-   LOGO
-   ========================================================= */
-
-.logo {
-    display: flex;
-    align-items: center;
-
-    color: #FFC107;
-
-    font-family: 'Montserrat', sans-serif;
-    font-size: 17px;
-    font-weight: 800;
-
-    letter-spacing: 0.5px;
+/* Lembre-se de ajustar o top do menu mobile para bater com a nova altura */
+.nav-menu {
+    position: absolute;
+    top: 55px; /* Atualizado para acompanhar a altura do header */
+    left: 0;
+    width: 100%;
+    /* ... restando do estilo igual */
 }
 
+/* Se reduzir bastante a altura, também vale diminuir levemente a logo */
 .logo img {
     width: auto;
-    height: 40px !important;
-
+    height: 32px !important; /* Ajustado de 40px para caber confortavelmente */
     object-fit: contain;
 }
 
