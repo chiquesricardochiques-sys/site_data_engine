@@ -1,0 +1,258 @@
+/* ==========================================================================
+   HERO / CAPA - ESTRUTURA MODERNA E RESPONSIVA
+   (Inclui alinhamento centralizado e animação de imagens)
+========================================================================== */
+
+/* Container Pai (Fixa a altura e posicionamento) */
+.hero-banner article {
+    position: relative;
+    width: 100%;
+    height: 85vh; /* Ocupa 85% da altura da tela visível */
+    min-height: 500px; /* Garante uma altura mínima */
+    overflow: hidden;
+    display: flex;
+    align-items: center;     /* Alinha todo o conteúdo verticalmente no meio */
+    justify-content: center; /* Centraliza todo o conteúdo horizontalmente */
+}
+
+/* Overlay (Camada escura semi-transparente sobre a imagem) */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Gradiente escuro suave para garantir contraste com o texto branco */
+    background: linear-gradient(to bottom, rgba(2, 4, 10, 0.6), rgba(2, 4, 10, 0.8));
+    z-index: 1; /* Fica entre a imagem e o texto */
+}
+
+/* =========================================
+   efeitos das img (Animação de Crossfade)
+========================================= */
+
+/* Estilo base das imagens (todas ficam invisíveis inicialmente) */
+.img_prinsipal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0; /* Fundo absoluto */
+    
+    /* Transição suave de opacidade (o truque do efeito) */
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out; 
+}
+
+/* Classes de animação (Ativadas automaticamente pelas keyframes abaixo) */
+.img1 { animation: event_img1 20s infinite linear; }
+.img2 { animation: event_img2 20s infinite linear; }
+.img3 { animation: event_img3 20s infinite linear; }
+
+/* Keyframes para 3 imagens (Calculado para 20s totais)
+   Cada imagem aparece por 6s, transita por 1.5s, e fica escondida pelo resto do tempo */
+@keyframes event_img1 {
+    0%, 33.33%, 100% { opacity: 0; }
+    11%, 25% { opacity: 1; }
+}
+
+@keyframes event_img2 {
+    0%, 33.33%, 100% { opacity: 0; }
+    44.33%, 58.33% { opacity: 1; }
+}
+
+@keyframes event_img3 {
+    0%, 66.66%, 100% { opacity: 0; }
+    77.66%, 91.66% { opacity: 1; }
+}
+/* Se você tiver apenas 2 imagens no backend, os keyframes precisam ser ajustados.
+   Avise se for o caso. Assumi 3 baseando-me no seu HTML original com img1, img2, img3 */
+
+
+/* =========================================
+   Container de Conteúdo (Texto + Botões)
+========================================= */
+
+/* Agrupa o bloco de texto e o bloco de botões para centralizar ambos */
+.hero-content {
+    position: relative;
+    z-index: 2; /* Acima do overlay e imagens */
+    display: flex;
+    flex-direction: column;     /* Empilha texto (cima) e botões (baixo) */
+    align-items: center;        /* Centraliza o texto e a linha de botões horizontalmente */
+    gap: 25px;                  /* Espaçamento entre o bloco de texto e os botões */
+    width: 100%;
+    max-width: 800px;           /* Limita a largura máxima para elegância */
+    padding: 0 20px;
+    
+    /* Animação de entrada sutil (Fade in) */
+    animation: heroFadeIn 1s ease-out;
+}
+
+/* --- Bloco de Texto (inf) --- */
+.inf {
+    width: 100%;
+    text-align: center;         /* Texto centralizado */
+    background: transparent;
+    backdrop-filter: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.inf > h1 {
+    /* Usando a fonte global definida no main.css */
+    font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 4.5rem); /* Responsivo */
+    color: #fff;
+    line-height: 1.1;
+    text-shadow: 0 3px 6px rgba(0,0,0,0.4);
+}
+
+.inf > p {
+    font-weight: 400;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    color: #f0f0f0;             /* Branco acinzentado suave */
+    line-height: 1.6;
+    font-family: inherit;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* --- Bloco de Botões (btns) — Lado a Lado --- */
+.btns {
+    width: 100%;
+    display: flex;
+    justify-content: center;    /* Centraliza os dois botões juntos */
+    gap: 20px;                  /* Espaçamento entre o botão "Criar Conta" e "Entrar" */
+    flex-wrap: wrap;            /* Permite que quebrem de linha em telas muito pequenas */
+    margin-top: 10px;
+}
+
+.btns > a {
+    /* Estilo base dos botões */
+    flex: 1;                    /* Fazem os botões crescerem igualmente para preencher o espaço */
+    max-width: 220px;           /* Tamanho máximo para não ficarem gigantes no desktop */
+    padding: 18px 25px;
+    text-decoration: none;
+    border-radius: 50px;        /* Formato pílula */
+    font-weight: 600;
+    font-size: 1rem;
+    transition: var(--transition); /* Usa sua variável de transição global */
+    display: flex;
+    align-items: center;
+    justify-content: center;    /* Centraliza o texto e o ícone dentro do botão */
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;        /* Impede que o texto do botão quebre de linha */
+    text-shadow: none;
+}
+.btn-agendar {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 14px 32px;
+    background: var(--primary-blue, #2563eb);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    border-radius: 8px;
+    text-align: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn-agendar:hover {
+    background: var(--primary-blue-dark, #1d4ed8);
+    transform: translateY(-2px);
+}
+
+.btn-agendar:active {
+    transform: translateY(0);
+}
+/* Ícones (usando Bootstrap Icons via CSS) */
+.btns > a::before {
+    font-family: "bootstrap-icons";
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+/* Botão 1 (Criar Conta) - Verde Sólido */
+.btns > .a1 {
+    background-color: var(--primary-green);
+    color: #000;
+}
+.btns > .a1::before { content: "\f4da"; } /* bi-person-add */
+
+.btns > .a1:hover {
+    background-color: #00e614; /* Verde mais claro no hover */
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 206, 17, 0.4);
+}
+
+/* Botão 2 (Entrar) - Borda Transparente */
+.btns > .a2 {
+    background-color: rgba(255, 255, 255, 0.05); /* Fundo muito leve */
+    color: #fff;
+    border: 2px solid var(--accent); /* Borda azul neon */
+}
+.btns > .a2::before { content: "\f47a"; } /* bi-person-lock */
+
+.btns > .a2:hover {
+    background-color: var(--accent); /* Fundo azul neon no hover */
+    color: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+}
+
+
+/* ==========================================================================
+   RESPONSIVO — TABLET E MOBILE
+========================================================================== */
+
+@media (max-width: 768px) {
+    .hero-banner article {
+        height: 80vh; /* Menor no mobile */
+    }
+    
+    .inf > h1 {
+        font-size: clamp(2rem, 8vw, 3rem);
+    }
+    
+    .btns > a {
+        font-size: 0.9rem;
+        padding: 15px 20px;
+    }
+}
+
+/* Ajustes finos para celulares pequenos (garante que fiquem lado a lado) */
+@media (max-width: 500px) {
+    .hero-content {
+        gap: 15px;
+    }
+
+    .btns {
+        gap: 10px;
+    }
+    
+    .btns > a {
+        max-width: 45%; /* Garante que ocupem ~50% da largura cada um */
+        font-size: 0.85rem;
+        padding: 12px 10px;
+    }
+    
+    .btns > a::before {
+        font-size: 1rem;
+        margin-right: 5px;
+    }
+}
+
+/* Animação de entrada Keyframes */
+@keyframes heroFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

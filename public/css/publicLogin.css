@@ -1,0 +1,683 @@
+/* =========================================================
+   LOGIN — NANO BANANA
+   Tema: Grafite + Dourado
+   ========================================================= */
+
+:root {
+    --login-bg: #202327;
+    --login-surface: #292d31;
+
+    --login-gold: #c9a957;
+    --login-gold-light: #f4d982;
+    --login-gold-dark: #9c7a32;
+
+    --login-text: #f2f2f2;
+    --login-muted: #aaaeb4;
+
+    --login-border: rgba(201, 169, 87, 0.55);
+
+    --login-danger: #ff7777;
+
+    --login-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.45);
+
+    --login-glow:
+        0 6px 22px rgba(201, 169, 87, 0.30);
+}
+
+
+/* =========================================================
+   ÁREA DO LOGIN
+   ========================================================= */
+
+main {
+    min-height: calc(100vh - 70px);
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 25px 15px;
+
+    background:
+        radial-gradient(
+            circle at 50% 30%,
+            rgba(201, 169, 87, 0.06),
+            transparent 45%
+        );
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.login-card {
+
+    position: relative;
+
+    width: 100%;
+    max-width: 420px;
+
+    padding: 25px 20px 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(48, 52, 57, 0.96),
+            rgba(35, 38, 42, 0.98)
+        );
+
+    border: 1px solid rgba(201, 169, 87, 0.38);
+
+    border-radius: 10px;
+
+    box-shadow:
+        var(--login-shadow),
+        inset 0 0 25px rgba(255, 255, 255, 0.015);
+
+    overflow: hidden;
+}
+
+
+/* Linha dourada superior */
+
+.login-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 10%;
+
+    width: 80%;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--login-gold),
+            transparent
+        );
+
+    opacity: 0.7;
+}
+
+
+/* =========================================================
+   CABEÇALHO DO LOGIN
+   ========================================================= */
+
+.login-card .header {
+
+    text-align: center;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   CÍRCULO DO LOGO
+   ========================================================= */
+
+.login-card .logo-circle {
+
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 10px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: var(--login-gold-light);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(201, 169, 87, 0.12),
+            rgba(20, 22, 24, 0.8)
+        );
+
+    border:
+        1px solid var(--login-gold);
+
+    box-shadow:
+        0 0 18px rgba(201, 169, 87, 0.12),
+        inset 0 0 15px rgba(201, 169, 87, 0.05);
+}
+
+
+.login-card .logo-circle svg {
+
+    width: 29px;
+    height: 29px;
+
+    stroke-width: 1.8;
+}
+
+
+/* =========================================================
+   TÍTULO
+   ========================================================= */
+
+.login-card h2 {
+
+    margin: 0 0 3px;
+
+    color: var(--login-gold-light);
+
+    font-family: 'Montserrat', sans-serif;
+
+    font-size: 22px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.3px;
+
+    text-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.45);
+}
+
+
+/* =========================================================
+   SUBTÍTULO
+   ========================================================= */
+
+.login-card .subtitle {
+
+    margin: 0;
+
+    color: #dedede;
+
+    font-size: 13px;
+
+    font-weight: 400;
+}
+
+
+/* =========================================================
+   MENSAGEM DE ERRO / SUCESSO
+   ========================================================= */
+
+.error-toast {
+
+    width: 100%;
+
+    min-height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 15px;
+
+    padding: 10px 11px;
+
+    color: #ffb2b2;
+
+    background:
+        rgba(150, 35, 35, 0.40);
+
+    border:
+        1px solid rgba(255, 110, 110, 0.35);
+
+    border-radius: 6px;
+
+    font-size: 12px;
+
+    line-height: 1.3;
+}
+
+
+.error-toast svg {
+
+    flex-shrink: 0;
+
+    width: 16px;
+    height: 16px;
+
+    color: #ff7777;
+}
+
+
+/* =========================================================
+   FORMULÁRIO
+   ========================================================= */
+
+.login-card .form-group {
+
+    margin-bottom: 12px;
+}
+
+
+/* =========================================================
+   INPUT WRAPPER
+   ========================================================= */
+
+.login-card .input-wrapper {
+
+    position: relative;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   ÍCONE
+   ========================================================= */
+
+.login-card .input-wrapper > svg {
+
+    position: absolute;
+
+    left: 12px;
+    top: 50%;
+
+    width: 17px;
+    height: 17px;
+
+    transform: translateY(-50%);
+
+    color: var(--login-gold);
+
+    pointer-events: none;
+
+    transition: 0.25s ease;
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.login-card input {
+
+    width: 100%;
+
+    height: 45px;
+
+    padding:
+        0 12px 0 38px;
+
+    color: #eeeeee;
+
+    background:
+        rgba(20, 22, 24, 0.55);
+
+    border:
+        1px solid rgba(201, 169, 87, 0.60);
+
+    border-radius: 7px;
+
+    outline: none;
+
+    font-family: 'Inter', sans-serif;
+
+    font-size: 13px;
+
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+
+.login-card input::placeholder {
+
+    color: #aeb0b3;
+
+    opacity: 1;
+}
+
+
+/* =========================================================
+   INPUT FOCUS
+   ========================================================= */
+
+.login-card input:focus {
+
+    border-color:
+        var(--login-gold-light);
+
+    background:
+        rgba(20, 22, 24, 0.75);
+
+    box-shadow:
+        0 0 0 2px rgba(201, 169, 87, 0.08),
+        0 0 12px rgba(201, 169, 87, 0.10);
+}
+
+
+.login-card .input-wrapper:focus-within svg {
+
+    color:
+        var(--login-gold-light);
+
+    transform:
+        translateY(-50%) scale(1.05);
+}
+
+
+/* =========================================================
+   BOTÃO ENTRAR
+   ========================================================= */
+
+.login-card button {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 50px;
+
+    margin-top: 5px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    color: #1e1e1e;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f6dc8d 0%,
+            #d5b65d 50%,
+            #efcf78 100%
+        );
+
+    border: none;
+
+    border-radius: 25px;
+
+    font-family: 'Montserrat', sans-serif;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        var(--login-glow);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.login-card button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 9px 28px rgba(201, 169, 87, 0.42);
+}
+
+
+.login-card button:active {
+
+    transform: translateY(0);
+
+    box-shadow:
+        0 4px 12px rgba(201, 169, 87, 0.25);
+}
+
+
+/* =========================================================
+   SETA
+   ========================================================= */
+
+.login-card button svg {
+
+    width: 19px;
+    height: 19px;
+
+    transition:
+        transform 0.25s ease;
+}
+
+
+.login-card button:hover svg {
+
+    transform:
+        translateX(4px);
+}
+
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+.login-card .footer-links {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    margin-top: 17px;
+
+    text-align: center;
+
+    color: var(--login-muted);
+
+    font-size: 12px;
+}
+
+
+.login-card .footer-links a {
+
+    color: #c995a7;
+
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+
+.login-card .footer-links a:hover {
+
+    color:
+        var(--login-gold-light);
+
+    text-decoration:
+        underline;
+}
+
+
+.login-card .footer-links p {
+
+    margin: 0;
+
+    color: #d0d0d0;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   CADASTRO
+   ========================================================= */
+
+.login-card .footer-links p a {
+
+    color: #d36b8a !important;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   MOBILE — IGUAL À REFERÊNCIA
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    main {
+
+        min-height:
+            calc(100vh - 70px);
+
+        padding:
+            10px 7px 20px;
+
+        align-items: center;
+    }
+
+
+    .login-card {
+
+        width: 100%;
+
+        max-width: 100%;
+
+        padding:
+            17px 14px 18px;
+
+        border-radius: 8px;
+    }
+
+
+    .login-card .header {
+
+        margin-bottom: 15px;
+    }
+
+
+    .login-card .logo-circle {
+
+        width: 55px;
+        height: 55px;
+
+        margin-bottom: 8px;
+    }
+
+
+    .login-card h2 {
+
+        font-size: 20px;
+    }
+
+
+    .login-card .subtitle {
+
+        font-size: 12px;
+    }
+
+
+    .error-toast {
+
+        min-height: 43px;
+
+        margin-bottom: 12px;
+
+        font-size: 11px;
+    }
+
+
+    .login-card .form-group {
+
+        margin-bottom: 10px;
+    }
+
+
+    .login-card input {
+
+        height: 44px;
+
+        font-size: 12px;
+    }
+
+
+    .login-card button {
+
+        height: 48px;
+
+        font-size: 16px;
+
+        margin-top: 4px;
+    }
+
+
+    .login-card .footer-links {
+
+        margin-top: 13px;
+
+        font-size: 11px;
+
+        gap: 5px;
+    }
+}
+
+
+/* =========================================================
+   TELAS MUITO PEQUENAS
+   ========================================================= */
+
+@media (max-width: 350px) {
+
+    main {
+
+        padding:
+            7px 5px 15px;
+    }
+
+
+    .login-card {
+
+        padding:
+            14px 11px;
+    }
+
+
+    .login-card .logo-circle {
+
+        width: 48px;
+        height: 48px;
+    }
+
+
+    .login-card .logo-circle svg {
+
+        width: 24px;
+        height: 24px;
+    }
+
+
+    .login-card h2 {
+
+        font-size: 18px;
+    }
+
+
+    .login-card input {
+
+        height: 42px;
+    }
+
+
+    .login-card button {
+
+        height: 45px;
+    }
+}

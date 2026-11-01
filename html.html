@@ -1,0 +1,1287 @@
+// controller public
+
+const salaoApi = require('../services/salaoApi.service');
+
+const authService = require('../services/authApi.service');
+
+
+function logoutCliente(req, res) {
+
+    req.session.destroy();
+
+    res.redirect('/');
+
+}
+
+
+async function mostrarCadastro(req, res) {
+
+    try {
+
+        const result = await salaoApi.register();
+
+        const textos = result.data.textos;
+
+
+        res.render('public/register', {
+
+            page: 'login',
+
+            layout: 'main',
+
+            textos,
+
+            register: true,
+
+            navbarPublic: true
+
+        });
+
+    } catch (error) {
+
+        console.error('Erro ao carregar cadastro:', error);
+
+        res.status(500).send('Erro ao carregar página de cadastro');
+
+    }
+
+}
+
+
+// async function registrarCliente(req, res) {
+//     try {
+//         const { nome, email, telefone, senha } = req.body;
+
+//         const result = await salaoApi.registrarCliente(nome, email, telefone, senha);
+//         const textos = result.data.textos;
+
+//         if (!result.success) {
+//             return res.render('public/register', {
+//                 page: 'login',
+//                 error: 'Email já cadastrado!',
+//                 textos,
+//                 register: true,
+//                 navbarPublic: true
+//             });
+//         }
+
+//         return res.redirect('/login?cadastro=sucesso');
+
+//     } catch (error) {
+//         console.error('Erro ao registrar cliente:', error);
+//         res.status(500).send('Erro ao registrar cliente');
+//     }
+// }
+
+
+async function registrarCliente(req, res) {
+
+    const { nome, email, telefone, senha } = req.body;
+
+
+    const dadosCadastro = {
+
+        nome: nome || '',
+
+        email: email || '',
+
+        telefone: telefone || ''
+
+    };
+
+
+    try {
+
+        // Validação inicial
+
+        if (
+
+            !nome?.trim() ||
+
+            !email?.trim() ||
+
+            !senha ||
+
+            nome.trim().length < 3 ||
+
+            senha.length < 8
+
+        ) {
+
+            return res.status(400).render('public/register', {
+
+                page: 'login',
+
+                error: 'Informe um nome com pelo menos 3 caracteres, um e-mail e uma senha com pelo menos 8 caracteres.',
+
+                ...dadosCadastro,
+
+                register: true,
+
+                navbarPublic: true
+
+            });
+
+        }
+
+
+        const emailNormalizado = email.trim().toLowerCase();
+
+
+        // Envia os quatro campos para a API central
+
+        const result = await authService.registrar(
+
+            nome.trim(),
+
+            emailNormalizado,
+
+            telefone,
+
+            senha
+
+        );
+
+
+        if (!result || result.success === false) {
+
+            return res.status(400).render('public/register', {
+
+                page: 'login',
+
+                error: result?.message || 'Não foi possível realizar o cadastro.',
+
+                ...dadosCadastro,
+
+                register: true,
+
+                navbarPublic: true
+
+            });
+
+        }
+
+
+        // Guarda somente os dados necessários para continuar o cadastro
+
+        req.session.cadastroPendente = {
+
+            nome: nome.trim(),
+
+            email: emailNormalizado,
+
+            telefone: telefone?.trim() || ''
+
+        };
+
+
+        // Próxima etapa: confirmar o código enviado ao e-mail
+
+        return res.redirect('/verify-email');
+
+
+    } catch (error) {
+
+        console.error('Erro ao registrar cliente:', {
+
+            status: error.status,
+
+            message: error.message,
+
+            data: error.data
+
+        });
+
+
+        return res.status(error.status === 409 ? 409 : 400).render(
+
+            'public/register',
+
+            {
+
+                page: 'login',
+
+                error: error.message || 'Erro ao realizar cadastro. Tente novamente.',
+
+                ...dadosCadastro,
+
+                register: true,
+
+                navbarPublic: true
+
+            }
+
+        );
+
+    }
+
+}
+
+
+// GET /verify-email
+
+async function mostrarVerificacaoEmail(req, res) {
+
+    try {
+
+        const cadastro = req.session.cadastroPendente;
+
+
+        if (!cadastro?.email) {
+
+            return res.redirect('/register');
+
+        }
+
+
+        return res.render('public/verify-email', {
+
+            layout: 'main',
+
+            page: 'login',
+
+            email: cadastro.email,
+
+            navbarPublic: true
+
+        });
+
+
+    } catch (error) {
+
+        console.error('Erro ao mostrar confirmação de e-mail:', error);
+
+        return res.status(500).send('Erro ao carregar a tela de confirmação.');
+
+    }
+
+}
+
+
+// POST /verify-email
+
+async function validarEmail(req, res) {
+
+    try {
+
+        const cadastro = req.session.cadastroPendente;
+
+
+        if (!cadastro?.email) {
+
+            return res.redirect('/register');
+
+        }
+
+
+        const codigo = String(req.body.codigo || '').trim();
+
+
+        if (!codigo) {
+
+            return res.status(400).render('public/verify-email', {
+
+                layout: 'main',
+
+                page: 'login',
+
+                email: cadastro.email,
+
+                error: 'Informe o código recebido por e-mail.',
+
+                navbarPublic: true
+
+            });
+
+        }
+
+
+        const result = await authService.confirmarEmail(
+
+            cadastro.email,
+
+            codigo
+
+        );
+
+
+        if (!result || result.success === false) {
+
+            return res.status(400).render('public/verify-email', {
+
+                layout: 'main',
+
+                page: 'login',
+
+                email: cadastro.email,
+
+                error: result?.message || 'Não foi possível confirmar o código.',
+
+                navbarPublic: true
+
+            });
+
+        }
+
+
+        // Cadastro confirmado: limpa os dados temporários da sessão
+
+        delete req.session.cadastroPendente;
+
+
+        return res.redirect('/login?cadastro=confirmado');
+
+
+    } catch (error) {
+
+        console.error('Erro ao validar código de e-mail:', {
+
+            status: error.status,
+
+            message: error.message,
+
+            data: error.data
+
+        });
+
+
+        const cadastro = req.session.cadastroPendente;
+
+
+        if (!cadastro?.email) {
+
+            return res.redirect('/register');
+
+        }
+
+
+        return res.status(error.status === 401 ? 400 : (error.status || 500))
+
+            .render('public/verify-email', {
+
+                layout: 'main',
+
+                page: 'login',
+
+                email: cadastro.email,
+
+                error: error.message || 'Erro ao validar o código. Tente novamente.',
+
+                navbarPublic: true
+
+            });
+
+    }
+
+}
+
+
+async function mostrarLogin(req, res) {
+
+    res.render('public/login', {
+
+        page: 'login',
+
+        register: true,
+
+        navbarPublic: true
+
+    });
+
+}
+
+
+// async function loginCliente(req, res) {
+//     try {
+//         const { email, senha } = req.body;
+
+//         const result = await salaoApi.loginCliente(email, senha);
+//         const textos = result.data.textos;
+//         console.log('Resultado do login:', result.success);
+
+//         if (!result.success) {
+//             return res.render('public/login', {
+//                 page: 'login',
+//                 textos,
+//                 error: "Email ou senha incorretos!",
+//                 register: true,
+//                 navbarPublic: true
+//             });
+//         }
+
+//         // Salvar sessão
+//         req.session.cliente = result.data.cliente;
+//         console.log('Sessão do cliente:', req.session.cliente);
+
+//         res.redirect('/client/home');
+
+//     } catch (error) {
+//         console.error('Erro ao efetuar login:', error);
+//         res.status(500).send('Erro ao efetuar login');
+//     }
+// }
+
+
+// home atualizada
+
+
+// async function loginCliente(req, res) {
+//     try {
+//         const { email, senha } = req.body;
+
+//         // Validação básica dos campos recebidos.
+//         if (!email || !senha) {
+//             return res.status(400).render('public/login', {
+//                 page: 'login',
+//                 error: 'Informe seu email e sua senha.',
+//                 register: true,
+//                 navbarPublic: true
+//             });
+//         }
+
+//         // Valida as credenciais na API central de autenticação.
+//         const result = await authService.login(
+//             email.trim().toLowerCase(),
+//             senha
+//         );
+
+//         // A API precisa retornar os tokens esperados.
+//         if (!result?.access_token || !result?.refresh_token) {
+//             console.error('Resposta de login sem os tokens esperados.');
+
+//             return res.status(502).render('public/login', {
+//                 page: 'login',
+//                 error: 'Resposta inválida do serviço de autenticação.',
+//                 register: true,
+//                 navbarPublic: true
+//             });
+//         }
+
+//         // Busca os dados do usuário autenticado.
+//         const perfil = await authService.meuPerfil(result.access_token);
+
+//         // Aceita respostas no formato { id, name, email }
+//         // ou dentro de { data: { id, name, email } }.
+//         const usuario = perfil?.data || perfil?.user || perfil;
+
+//         if (!usuario?.id) {
+//             console.error('A API Auth não retornou o ID do usuário.');
+
+//             return res.status(502).render('public/login', {
+//                 page: 'login',
+//                 error: 'Não foi possível identificar sua conta.',
+//                 register: true,
+//                 navbarPublic: true
+//             });
+//         }
+
+//         // Cria uma nova sessão após autenticação bem-sucedida.
+//         await new Promise((resolve, reject) => {
+//             req.session.regenerate(err => {
+//                 if (err) return reject(err);
+//                 resolve();
+//             });
+//         });
+
+//         // Mantém compatibilidade com as telas atuais do cliente.
+//         req.session.cliente = {
+//             id: usuario.id,
+//             nome: usuario.name,
+//             email: usuario.email
+//         };
+
+//         // Mantém os tokens no servidor, dentro da sessão.
+//         req.session.auth = {
+//             accessToken: result.access_token,
+//             refreshToken: result.refresh_token,
+//             expiresIn: result.expires_in || null
+//         };
+
+//         // Garante que a sessão seja salva antes do redirecionamento.
+//         await new Promise((resolve, reject) => {
+//             req.session.save(err => {
+//                 if (err) return reject(err);
+//                 resolve();
+//             });
+//         });
+
+//         return res.redirect('/client/home');
+
+//     } catch (error) {
+
+//         if (error.status === 400 || error.status === 401) {
+//             return res.status(401).render('public/login', {
+//                 page: 'login',
+//                 error: 'Email ou senha incorretos!',
+//                 register: true,
+//                 navbarPublic: true
+//             });
+//         }
+
+//         console.error('Erro ao autenticar cliente:', {
+//             status: error.status,
+//             message: error.message
+//         });
+
+//         return res.status(502).render('public/login', {
+//             page: 'login',
+//             error: 'Não foi possível validar sua conta. Tente novamente.',
+//             register: true,
+//             navbarPublic: true
+//         });
+//     }
+// }
+
+
+// GET /forgot-password
+
+
+async function loginCliente(req, res) {
+
+    const email = String(req.body.email || '').trim().toLowerCase();
+
+    const senha = String(req.body.senha || '');
+
+
+    try {
+
+        if (!email || !senha) {
+
+            return res.status(400).render('public/login', {
+
+                layout: 'main',
+
+                page: 'login',
+
+                error: 'Informe seu e-mail e sua senha.',
+
+                navbarPublic: true
+
+            });
+
+        }
+
+
+        // 1. Autentica no serviço externo de Auth
+
+        const result = await authService.login(email, senha);
+
+
+        if (!result || result.success !== true || !result.user) {
+
+            return res.status(401).render('public/login', {
+
+                layout: 'main',
+
+                page: 'login',
+
+                error: 'Não foi possível entrar. Verifique seus dados.',
+
+                navbarPublic: true
+
+            });
+
+        }
+
+
+        const usuario = result.user;
+
+
+        // 2. Verifica se a conta está ativa e o e-mail confirmado
+
+        if (
+
+            usuario.status !== 'ativo' ||
+
+            usuario.email_verificado !== true
+
+        ) {
+
+            return res.status(403).render('public/login', {
+
+                layout: 'main',
+
+                page: 'login',
+
+                error: 'Sua conta precisa estar ativa e com o e-mail confirmado.',
+
+                navbarPublic: true
+
+            });
+
+        }
+
+
+        // 3. Garante o vínculo do usuário Auth com o cliente interno.
+        //
+        // Se já existir:
+        // retorna o id_cliente existente.
+        //
+        // Se não existir:
+        // cria o vínculo e retorna o novo id_cliente.
+        //
+        // O salao_id é definido pelo .env dentro
+        // do salaoApi.service.
+
+        const relacao =
+
+            await salaoApi.adicionarOuObterCliente(
+
+                usuario.id
+
+            );
+
+
+        // 4. Regenera a sessão para evitar reutilização
+        //    da sessão anterior.
+
+        req.session.regenerate((erro) => {
+
+            if (erro) {
+
+                console.error(
+
+                    'Erro ao criar sessão:',
+
+                    erro
+
+                );
+
+
+                return res.status(500).render('public/login', {
+
+                    layout: 'main',
+
+                    page: 'login',
+
+                    error: 'Não foi possível iniciar sua sessão. Tente novamente.',
+
+                    navbarPublic: true
+
+                });
+
+            }
+
+
+            // 5. Guarda na sessão:
+            //    - ID do Auth
+            //    - ID interno do cliente
+            //    - ID do salão
+            //    - dados básicos do usuário
+
+            req.session.cliente = {
+
+                auth_user_id: usuario.id,
+
+                id_cliente: relacao.id_cliente,
+
+                salao_id: relacao.salao_id,
+
+
+                nome: usuario.nome,
+
+                email: usuario.email,
+
+                telefone: usuario.telefone || '',
+
+                status: usuario.status,
+
+                email_verificado: usuario.email_verificado
+
+            };
+
+
+            // 6. Salva a sessão
+
+            req.session.save((erroSalvar) => {
+
+                if (erroSalvar) {
+
+                    console.error(
+
+                        'Erro ao salvar sessão:',
+
+                        erroSalvar
+
+                    );
+
+
+                    return res.status(500).render('public/login', {
+
+                        layout: 'main',
+
+                        page: 'login',
+
+                        error: 'Não foi possível salvar sua sessão.',
+
+                        navbarPublic: true
+
+                    });
+
+                }
+
+
+                // 7. Usuário autenticado e vinculado
+
+                return res.redirect('/');
+
+            });
+
+        });
+
+
+    } catch (error) {
+
+        console.error('Erro ao autenticar cliente:', {
+
+            status: error.status,
+
+            message: error.message,
+
+            data: error.data
+
+        });
+
+
+        const status = error.status === 401 ? 401 : 500;
+
+
+        return res.status(status).render('public/login', {
+
+            layout: 'main',
+
+            page: 'login',
+
+            error: error.status === 401
+
+                ? 'E-mail ou senha inválidos.'
+
+                : 'Erro ao realizar login. Tente novamente.',
+
+            navbarPublic: true
+
+        });
+
+    }
+
+}
+
+
+async function mostrarEsqueciSenha(req, res) {
+
+    return res.render('public/forgot-password', {
+
+        layout: 'main',
+
+        page: 'login',
+
+        navbarPublic: true
+
+    });
+
+}
+
+
+// POST /forgot-password
+
+async function solicitarRecuperacao(req, res) {
+
+    const email = String(req.body.email || '').trim().toLowerCase();
+
+    const senha = String(req.body.senha || '');
+
+    const confirmarSenha = String(req.body.confirmar_senha || '');
+
+
+    const dados = { email };
+
+
+    if (!email || !senha || !confirmarSenha) {
+
+        return res.status(400).render('public/forgot-password', {
+
+            layout: 'main',
+
+            page: 'login',
+
+            error: 'Preencha todos os campos.',
+
+            ...dados,
+
+            navbarPublic: true
+
+        });
+
+    }
+
+
+    if (senha.length < 8) {
+
+        return res.status(400).render('public/forgot-password', {
+
+            layout: 'main',
+
+            page: 'login',
+
+            error: 'A nova senha deve ter pelo menos 8 caracteres.',
+
+            ...dados,
+
+            navbarPublic: true
+
+        });
+
+    }
+
+
+    if (senha !== confirmarSenha) {
+
+        return res.status(400).render('public/forgot-password', {
+
+            layout: 'main',
+
+            page: 'login',
+
+            error: 'As senhas não coincidem.',
+
+            ...dados,
+
+            navbarPublic: true
+
+        });
+
+    }
+
+
+    try {
+
+        const result = await authService.recuperarSenha(
+
+            email,
+
+            senha,
+
+            confirmarSenha
+
+        );
+
+
+        if (!result || result.success === false) {
+
+            return res.status(400).render('public/forgot-password', {
+
+                layout: 'main',
+
+                page: 'login',
+
+                error: result?.message || 'Não foi possível solicitar a recuperação.',
+
+                ...dados,
+
+                navbarPublic: true
+
+            });
+
+        }
+
+
+        req.session.recuperacaoPendente = { email };
+
+
+        return res.redirect('/verify-recovery');
+
+
+    } catch (error) {
+
+        console.error('Erro ao solicitar recuperação:', {
+
+            status: error.status,
+
+            message: error.message,
+
+            data: error.data
+
+        });
+
+
+        return res.status(error.status || 500).render(
+
+            'public/forgot-password',
+
+            {
+
+                layout: 'main',
+
+                page: 'login',
+
+                error: error.message || 'Erro ao solicitar recuperação.',
+
+                ...dados,
+
+                navbarPublic: true
+
+            }
+
+        );
+
+    }
+
+}
+
+
+// GET /verify-recovery
+
+async function mostrarValidacaoRecuperacao(req, res) {
+
+    const recuperacao = req.session.recuperacaoPendente;
+
+
+    if (!recuperacao?.email) {
+
+        return res.redirect('/forgot-password');
+
+    }
+
+
+    return res.render('public/verify-recovery', {
+
+        layout: 'main',
+
+        page: 'login',
+
+        email: recuperacao.email,
+
+        navbarPublic: true
+
+    });
+
+}
+
+
+// POST /verify-recovery
+
+async function validarRecuperacao(req, res) {
+
+    const recuperacao = req.session.recuperacaoPendente;
+
+
+    if (!recuperacao?.email) {
+
+        return res.redirect('/forgot-password');
+
+    }
+
+
+    const codigo = String(req.body.codigo || '').trim();
+
+
+    if (!codigo) {
+
+        return res.status(400).render('public/verify-recovery', {
+
+            layout: 'main',
+
+            page: 'login',
+
+            email: recuperacao.email,
+
+            error: 'Digite o código recebido por e-mail.',
+
+            navbarPublic: true
+
+        });
+
+    }
+
+
+    try {
+
+        const result = await authService.confirmarRecuperacao(
+
+            recuperacao.email,
+
+            codigo
+
+        );
+
+
+        if (!result || result.success === false) {
+
+            return res.status(400).render('public/verify-recovery', {
+
+                layout: 'main',
+
+                page: 'login',
+
+                email: recuperacao.email,
+
+                error: result?.message || 'Código inválido ou expirado.',
+
+                navbarPublic: true
+
+            });
+
+        }
+
+
+        delete req.session.recuperacaoPendente;
+
+
+        return res.redirect('/login?senha=alterada');
+
+
+    } catch (error) {
+
+        console.error('Erro ao validar recuperação:', {
+
+            status: error.status,
+
+            message: error.message,
+
+            data: error.data
+
+        });
+
+
+        return res.status(error.status || 500).render(
+
+            'public/verify-recovery',
+
+            {
+
+                layout: 'main',
+
+                page: 'login',
+
+                email: recuperacao.email,
+
+                error: error.message || 'Não foi possível validar o código.',
+
+                navbarPublic: true
+
+            }
+
+        );
+
+    }
+
+}
+
+
+async function home(req, res) {
+
+    try {
+
+        const resposta = await salaoApi.home();
+
+        const {
+
+            textos
+
+        } = resposta.data;
+
+
+        res.render('public/home', {
+
+            page: 'home',
+
+            textos
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+
+            'Erro ao carregar home:',
+
+            error
+
+        );
+
+
+        res.status(500).send(
+
+            'Erro ao carregar a página inicial'
+
+        );
+
+    }
+
+}
+
+
+// Tela de recuperar senha
+
+async function mostrarRecuperarSenha(req, res) {
+
+    res.render('public/forgot-password', {
+
+        page: 'login',
+
+        register: true,
+
+        error: null,
+
+        success: null
+
+    });
+
+}
+
+
+// Enviar email (simulado por enquanto)
+
+async function enviarRecuperacao(req, res) {
+
+    try {
+
+        const { email } = req.body;
+
+
+        const result = await salaoApi.enviarRecuperacao(email);
+
+        const textos = result.data.textos;
+
+
+        if (!result.success) {
+
+            return res.render('public/forgot-password', {
+
+                page: 'login',
+
+                register: true,
+
+                textos,
+
+                error: result.message,
+
+                success: null
+
+            });
+
+        }
+
+
+        // REDIRECIONA PARA RESET DE SENHA
+
+        res.redirect(`/reset-senha?token=${result.data.token}`);
+
+
+    } catch (err) {
+
+        console.error('Erro ao processar recuperação:', err);
+
+        res.render('public/forgot-password', {
+
+            page: 'login',
+
+            register: true,
+
+            textos: null,
+
+            error: 'Erro ao processar recuperação',
+
+            success: null
+
+        });
+
+    }
+
+}
+
+
+// Tela de nova senha
+
+async function mostrarResetSenha(req, res) {
+
+    const { token } = req.query;
+
+
+    if (!token) {
+
+        return res.redirect('/forgot-password');
+
+    }
+
+
+    res.render('public/reset-password', {
+
+        page: 'publicRegister',
+
+        register: true,
+
+        token
+
+    });
+
+}
+
+
+async function resetarSenha(req, res) {
+
+    try {
+
+        const { token, senha } = req.body;
+
+
+        const result = await salaoApi.resetarSenha(token, senha);
+
+
+        if (!result.success) {
+
+            return res.redirect(`/forgot-password?error=${encodeURIComponent(result.message)}`);
+
+        }
+
+
+        res.redirect('/login?success=' + encodeURIComponent('Senha alterada com sucesso'));
+
+
+    } catch (err) {
+
+        console.error('Erro ao redefinir senha:', err);
+
+        res.redirect('/forgot-password?error=' + encodeURIComponent('Erro ao redefinir senha'));
+
+    }
+
+}
+
+
+module.exports = {
+
+    home,
+
+    mostrarCadastro,
+
+    registrarCliente,
+
+    mostrarLogin,
+
+    loginCliente,
+
+    logoutCliente,
+
+    mostrarRecuperarSenha,
+
+    enviarRecuperacao,
+
+    mostrarResetSenha,
+
+    resetarSenha,
+
+    mostrarVerificacaoEmail,
+
+    validarEmail,
+
+    mostrarEsqueciSenha,
+
+    solicitarRecuperacao,
+
+    mostrarValidacaoRecuperacao,
+
+    validarRecuperacao
+
+};

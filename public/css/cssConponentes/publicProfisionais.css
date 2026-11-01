@@ -1,0 +1,154 @@
+
+/* =========================
+   VARIÁVEIS E RESET
+========================= */
+:root {
+    --primary-blue: #00d2ff;
+    --neon-cyan: #00ffff;
+    --bg-dark: #000000;
+    --text-light: #ffffff;
+}
+
+
+/* =========================
+   ESTILIZAÇÃO DO TÍTULO DA SEÇÃO (H1 PRINCIPAL)
+========================= */
+.profisionais {
+    background: var(--bg-dark);
+    text-align: center;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+.profisionais > h1 {
+    color: var(--text-light);
+    font-size: 2.2rem; /* Aumentado */
+    padding: 30px 10px 20px 10px;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 800; /* Mais grosso */
+    background: var(00d2ff);
+    text-shadow: 0 0 20px rgba(0, 210, 255, 0.3);
+}
+
+/* =========================
+   BASE DO CARROSSEL
+========================= */
+.bazaComentarios {
+    position: relative;
+    background: #000;
+    height: 85vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* =========================
+   BOTÕES REAJUSTADOS E ALINHADOS
+========================= */
+.bazaComentarios > .prala,
+.bazaComentarios > .praca {
+    position: absolute;
+    top: 50%;
+    width: 60px;
+    height: 70px;
+    background: var(--primary-blue);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    z-index: 1000;
+    cursor: pointer;
+    border: none;
+    font-size: 1.8rem;
+    box-shadow: 0 0 25px rgba(0, 210, 255, 0.5);
+}
+
+/* Botão Esquerdo */
+.bazaComentarios > .prala { 
+    left: 0; 
+    border-radius: 0 40px 40px 0; 
+    transform: translateY(-50%) rotate(180deg); 
+}
+
+/* Botão Direito (Corrigido o alinhamento e borda) */
+.bazaComentarios > .praca { 
+    right: 0; 
+    border-radius: 40px 0 0 40px; 
+    transform: translateY(-50%); 
+}
+
+/* ANIMAÇÕES DE VIBRAÇÃO */
+@keyframes shakeRight {
+    0%, 100% { transform: translateY(-50%); }
+    25% { transform: translateY(-52%) translateX(-5px); }
+    75% { transform: translateY(-48%) translateX(5px); }
+}
+
+@keyframes shakeLeft {
+    0%, 100% { transform: translateY(-50%) rotate(180deg); }
+    25% { transform: translateY(-52%) translateX(5px) rotate(180deg); }
+    75% { transform: translateY(-48%) translateX(-5px) rotate(180deg); }
+}
+
+.vibrar-dir { animation: shakeRight 0.4s ease-in-out; }
+.vibrar-esq { animation: shakeLeft 0.4s ease-in-out; }
+
+/* =========================
+   CONTEÚDO
+========================= */
+.baze { width: 100%; height: 100%; position: relative; }
+
+.content {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1s ease;
+    z-index: 1;
+}
+
+.content.active { opacity: 1; z-index: 10; }
+
+.content > .img { width: 100%; height: 100%; }
+.content > .img img { width: 100%; height: 100%; object-fit: cover; }
+
+.content > .desc {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 100px 25px 50px;
+    background: linear-gradient(to top, #000 35%, transparent 100%);
+    text-align: left;
+    z-index: 20;
+}
+
+.desc > h1 {
+    color: #fff;
+    font-size: 2.6rem;
+    margin: 0;
+    font-weight: 900;
+    line-height: 1;
+    border-left: 6px solid var(--primary-blue);
+    padding-left: 15px;
+    background: linear-gradient(to right, #fff, var(--primary-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transform: translateX(-30px);
+    opacity: 0;
+    transition: 0.8s 0.2s ease-out;
+}
+
+.desc > p {
+    color: var(--primary-blue);
+    font-size: 1.1rem;
+    margin-top: 10px;
+    padding-left: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.8s 0.4s ease-out;
+}
+
+.content.active .desc h1 { transform: translateX(0); opacity: 1; }
+.content.active .desc p { transform: translateY(0); opacity: 0.9; }

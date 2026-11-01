@@ -1,0 +1,205 @@
+
+
+
+:root {
+    --bg-dark: #1a1a2e;
+    --item-bg: #16213e;
+    --accent: #00fff2;
+    --text-light: #e0e0e0;
+    --text-dim: #82b8b8;
+    --radius: 8px;
+}
+
+/* Container Principal */
+.comentarios {
+    width: 100%;
+    padding: 20px 10px;
+    background-color: var(--bg-dark);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden; /* Evita scroll lateral no celular */
+}
+
+.comentarios > h1 {
+    color: var(--accent);
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Grid de Comentários */
+.base_coments {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaço entre comentários */
+    max-width: 500px; /* Largura boa para celular e desktop */
+    margin: 0 auto;
+}
+
+/* Item de Comentário Individual */
+.item_coment {
+    position: relative;
+    display: flex;
+    align-items: flex-start; /* Alinha no topo para textos longos */
+    padding: 15px;
+    background: var(--item-bg);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--accent);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* Ícones de Status (Topo Direito) */
+.icones_acresentados {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 0.8rem;
+    display: flex;
+    gap: 5px;
+    opacity: 0.7;
+}
+
+.icon_a {
+    color: var(--accent);
+    animation: pulse 2s infinite;
+}
+
+/* Avatar */
+.item_coment .img {
+    flex-shrink: 0; /* Não deixa a imagem esmagar */
+    width: 45px;
+    height: 45px;
+    border-radius: 50%; /* Circular fica mais moderno */
+    border: 2px solid var(--accent);
+    overflow: hidden;
+    background: #000;
+}
+
+.item_coment .img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Área de Texto */
+.descricao {
+    margin-left: 12px;
+    flex-grow: 1;
+}
+
+.descricao h1 {
+    font-size: 0.95rem;
+    color: #fff;
+    margin: 0 0 5px 0;
+    font-weight: 600;
+}
+
+.descricao p {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.4;
+    margin: 0;
+    word-break: break-word; /* Evita que o texto saia da caixa */
+}
+
+/* Animações */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.5; }
+}
+
+.bi-rocket {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    50% { transform: translateY(-5px) rotate(5deg); }
+}
+
+/* Ajustes para Celulares Pequenos */
+@media (max-width: 360px) {
+    .descricao h1 { font-size: 0.85rem; }
+    .descricao p { font-size: 0.8rem; }
+}
+/* --------------------------
+   TABLET (361px a 767px)
+---------------------------- */
+@media (min-width: 361px) and (max-width: 767px) {
+    .comentarios {
+      padding: 25px 20px;
+    }
+  
+    .comentarios > h1 {
+      font-size: 1.7rem;
+      gap: 12px;
+    }
+  
+    .base_coments {
+      max-width: 600px;
+      gap: 18px;
+    }
+  
+    .item_coment {
+      padding: 18px;
+    }
+  
+    .item_coment .img {
+      width: 50px;
+      height: 50px;
+    }
+  
+    .descricao h1 {
+      font-size: 1rem;
+    }
+  
+    .descricao p {
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* --------------------------
+     DESKTOP (768px e acima)
+  ---------------------------- */
+  @media (min-width: 768px) {
+    .comentarios {
+      padding: 40px 60px;
+    }
+  
+    .comentarios > h1 {
+      font-size: 2rem;
+      gap: 15px;
+    }
+  
+    .base_coments {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 1000px;
+      gap: 25px;
+    }
+  
+    .item_coment {
+      flex-direction: column;
+      width: 300px; /* Largura fixa pra grid */
+      padding: 20px;
+    }
+  
+    .item_coment .img {
+      width: 60px;
+      height: 60px;
+    }
+  
+    .descricao h1 {
+      font-size: 1.1rem;
+    }
+  
+    .descricao p {
+      font-size: 0.95rem;
+    }
+  }
+  

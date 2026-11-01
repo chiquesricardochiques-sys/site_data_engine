@@ -1,0 +1,72 @@
+```handlebars
+<div class="login-card">
+
+    <div class="header">
+        <div class="logo-circle">
+            <i data-lucide="mail-check"></i>
+        </div>
+
+        <h2>Confirme seu e-mail</h2>
+
+        <p class="subtitle">
+            Enviamos um código de confirmação para:
+        </p>
+
+        <p>
+            <strong>{{email}}</strong>
+        </p>
+    </div>
+
+    {{#if error}}
+        <div class="error-toast" role="alert">
+            <i data-lucide="alert-circle" style="width: 16px;"></i>
+            {{error}}
+        </div>
+    {{/if}}
+
+    {{#if success}}
+        <div class="error-toast success" role="status">
+            <i data-lucide="check-circle" style="width: 16px;"></i>
+            {{success}}
+        </div>
+    {{/if}}
+
+    <form action="/verify-email" method="POST">
+
+        <div class="form-group">
+            <div class="input-wrapper">
+                <i data-lucide="key-round"></i>
+
+                <input
+                    type="text"
+                    name="codigo"
+                    required
+                    autocomplete="one-time-code"
+                    inputmode="numeric"
+                    placeholder="Digite o código recebido"
+                    aria-label="Código de confirmação"
+                >
+            </div>
+        </div>
+
+        <button type="submit">
+            Confirmar e-mail
+            <i data-lucide="arrow-right" style="width: 18px;"></i>
+        </button>
+
+    </form>
+
+    <div class="footer-links" style="justify-content: center;">
+        <p>
+            E-mail incorreto?
+            <a
+                href="/register"
+                style="color:var(--primary-blue); font-weight:600;"
+            >
+                Voltar ao cadastro
+            </a>
+        </p>
+    </div>
+
+</div>
+```

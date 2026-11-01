@@ -1,0 +1,35 @@
+<footer class="footer-nav">
+    <a href="/" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Início</span>
+    </a>
+
+    <a href="/client/schedule" class="nav-item">
+        <i class="far fa-calendar-alt"></i>
+        <span>Agendar</span>
+    </a>
+
+    <a href="/client/my-schedules" class="nav-item">
+        <i class="fas fa-list"></i>
+        <span>Meus Horários</span>
+    </a>
+
+    <a href="/client/profile" class="nav-item">
+        <i class="far fa-user-circle"></i>
+        <span>Perfil</span>
+    </a>
+</footer>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const currentPath = window.location.pathname;
+
+        document.querySelectorAll(".footer-nav .nav-item").forEach(item => {
+            const itemPath = new URL(item.href, window.location.origin).pathname;
+
+            item.classList.toggle(
+                "active",
+                currentPath === itemPath
+            );
+        });
+    });
+</script>

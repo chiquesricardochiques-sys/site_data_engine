@@ -1,0 +1,223 @@
+<div class="login-card">
+
+    <!-- =====================================================
+         CABEÇALHO
+         ===================================================== -->
+
+    <div class="header">
+
+        <div class="logo-circle">
+            <i data-lucide="user-plus"></i>
+        </div>
+
+        <h2>
+            Crie sua conta
+        </h2>
+
+        <p class="subtitle">
+            Preencha seus dados para criar sua conta
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         MENSAGEM DE ERRO
+         ===================================================== -->
+
+    {{#if error}}
+
+        <div
+            class="error-toast"
+            role="alert"
+        >
+
+            <i data-lucide="alert-circle"></i>
+
+            <span>
+                {{error}}
+            </span>
+
+        </div>
+
+    {{/if}}
+
+
+    <!-- =====================================================
+         MENSAGEM DE SUCESSO
+         ===================================================== -->
+
+    {{#if success}}
+
+        <div
+            class="error-toast success"
+            role="status"
+        >
+
+            <i data-lucide="check-circle"></i>
+
+            <span>
+                {{success}}
+            </span>
+
+        </div>
+
+    {{/if}}
+
+
+    <!-- =====================================================
+         FORMULÁRIO DE CADASTRO
+         ===================================================== -->
+
+    <form
+        action="/register"
+        method="POST"
+    >
+
+
+        <!-- =================================================
+             NOME COMPLETO
+             ================================================= -->
+
+        <div class="form-group">
+
+            <div class="input-wrapper">
+
+                <i data-lucide="user"></i>
+
+                <input
+                    type="text"
+                    name="nome"
+                    value="{{nome}}"
+                    required
+                    minlength="3"
+                    maxlength="120"
+                    autocomplete="name"
+                    placeholder="Seu nome completo"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             E-MAIL
+             ================================================= -->
+
+        <div class="form-group">
+
+            <div class="input-wrapper">
+
+                <i data-lucide="mail"></i>
+
+                <input
+                    type="email"
+                    name="email"
+                    value="{{email}}"
+                    required
+                    maxlength="254"
+                    autocomplete="email"
+                    placeholder="Seu melhor e-mail"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TELEFONE
+             ================================================= -->
+
+        <div class="form-group">
+
+            <div class="input-wrapper">
+
+                <i data-lucide="phone"></i>
+
+                <input
+                    type="tel"
+                    name="telefone"
+                    value="{{telefone}}"
+                    autocomplete="tel"
+                    placeholder="Telefone (opcional)"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SENHA
+             ================================================= -->
+
+        <div class="form-group">
+
+            <div class="input-wrapper">
+
+                <i data-lucide="lock"></i>
+
+                <input
+                    type="password"
+                    name="senha"
+                    required
+                    minlength="8"
+                    autocomplete="new-password"
+                    placeholder="Crie uma senha (mínimo 8 caracteres)"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             BOTÃO CADASTRAR
+             ================================================= -->
+
+        <button
+            type="submit"
+        >
+
+            <span>
+                Criar minha conta
+            </span>
+
+            <i data-lucide="arrow-right"></i>
+
+        </button>
+
+    </form>
+
+
+    <!-- =====================================================
+         RODAPÉ
+         ===================================================== -->
+
+    <div class="footer-links">
+
+        <p>
+
+            Já tem conta?
+
+            <a href="/login">
+                Fazer login
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     ÍCONES LUCIDE
+     ========================================================= -->
+
+<!--
+    Os ícones Lucide são inicializados
+    pelo layout principal.
+-->

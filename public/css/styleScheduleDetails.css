@@ -1,0 +1,458 @@
+.details-page {
+    --det-bg: #f5f5f5;
+    --det-card: #ffffff;
+    --det-text: #222222;
+    --det-soft: #777777;
+    --det-border: #eeeeee;
+    --det-accent: #ffc107;
+    --det-accent-texto: #7a5a00;
+    --det-erro: #dc3545;
+
+    background: var(--det-bg);
+    min-height: 100%;
+    padding: 16px;
+    color: var(--det-text);
+    box-sizing: border-box;
+}
+
+.details-page *,
+.details-page *::before,
+.details-page *::after {
+    box-sizing: border-box;
+}
+
+.details-content {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+/* ============================================================
+   VOLTAR
+============================================================ */
+
+.details-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 14px;
+    color: var(--det-soft);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.details-back:hover {
+    color: var(--det-text);
+}
+
+/* ============================================================
+   CABEÇALHO
+============================================================ */
+
+.details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.details-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.details-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    padding: 4px 12px;
+    border-radius: 999px;
+
+    background: rgba(255, 193, 7, 0.18);
+    color: var(--det-accent-texto);
+
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+/* ============================================================
+   CARDS
+============================================================ */
+
+.details-card {
+    width: 100%;
+
+    background: var(--det-card);
+    border-radius: 12px;
+
+    padding: 16px;
+    margin-bottom: 12px;
+
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.details-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    line-height: 1.3;
+
+    text-transform: uppercase;
+
+    color: var(--det-soft);
+}
+
+/* ============================================================
+   DATA E HORÁRIO
+============================================================ */
+
+.details-data {
+    margin: 0 0 3px;
+
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.details-hora {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    margin: 0;
+
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.details-hora .details-muted {
+    margin: 0;
+    font-weight: 400;
+}
+
+/* ============================================================
+   TEXTOS
+============================================================ */
+
+.details-nome {
+    margin: 0;
+
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.details-muted {
+    margin: 2px 0 0;
+
+    font-size: 13px;
+    line-height: 1.4;
+
+    color: var(--det-soft);
+}
+
+/* ============================================================
+   PROFISSIONAL
+============================================================ */
+
+.details-pessoa {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.details-avatar {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.details-avatar-vazio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255, 193, 7, 0.2);
+    color: var(--det-accent-texto);
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* ============================================================
+   SERVIÇOS
+============================================================ */
+
+.details-servicos {
+    list-style: none;
+
+    margin: 0;
+    padding: 0;
+}
+
+.details-servico {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid var(--det-border);
+}
+
+.details-servico:first-child {
+    padding-top: 0;
+}
+
+.details-servico:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.details-servico-img {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 10px;
+
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.details-servico-vazio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--det-border);
+    color: var(--det-soft);
+}
+
+.details-servico-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.details-servico-info .details-nome {
+    overflow-wrap: anywhere;
+}
+
+.details-preco {
+    flex-shrink: 0;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+/* ============================================================
+   TOTAL
+============================================================ */
+
+.details-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-top: 12px;
+    padding-top: 12px;
+
+    border-top: 1px solid var(--det-border);
+
+    font-size: 16px;
+}
+
+.details-total strong {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+/* ============================================================
+   OBSERVAÇÃO
+============================================================ */
+
+.details-obs {
+    margin: 0;
+
+    font-size: 14px;
+    line-height: 1.5;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* ============================================================
+   CONTATOS
+============================================================ */
+
+.details-contatos {
+    display: flex;
+    gap: 8px;
+
+    margin-top: 12px;
+}
+
+.details-contatos .details-btn {
+    min-width: 0;
+}
+
+/* ============================================================
+   BOTÕES
+============================================================ */
+
+.details-btn {
+    display: block;
+
+    width: 100%;
+
+    padding: 13px;
+
+    border-radius: 10px;
+    border: 0;
+
+    background: var(--det-accent);
+    color: #222222;
+
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.3;
+
+    text-align: center;
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+.details-btn:hover {
+    filter: brightness(0.97);
+}
+
+.details-btn-contorno {
+    flex: 1;
+
+    width: auto;
+
+    background: transparent;
+
+    border: 1px solid var(--det-accent);
+
+    color: var(--det-text);
+
+    padding: 10px;
+}
+
+/* ============================================================
+   RODAPÉ
+============================================================ */
+
+.details-rodape {
+    margin: 4px 0 16px;
+
+    text-align: center;
+
+    font-size: 12px;
+    line-height: 1.4;
+
+    color: var(--det-soft);
+}
+
+/* ============================================================
+   ERRO
+============================================================ */
+
+.details-erro {
+    background: var(--det-card);
+
+    border-radius: 12px;
+
+    padding: 28px 16px;
+
+    text-align: center;
+
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.details-erro i {
+    font-size: 30px;
+    color: var(--det-erro);
+}
+
+.details-erro p {
+    margin: 12px 0 18px;
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* ============================================================
+   RESPONSIVO
+============================================================ */
+
+@media (max-width: 480px) {
+
+    .details-page {
+        padding: 12px;
+    }
+
+    .details-header {
+        align-items: flex-start;
+    }
+
+    .details-title {
+        font-size: 19px;
+    }
+
+    .details-card {
+        padding: 14px;
+        border-radius: 11px;
+    }
+
+    .details-data {
+        font-size: 17px;
+    }
+
+    .details-hora {
+        font-size: 15px;
+    }
+
+    .details-servico {
+        gap: 10px;
+    }
+
+    .details-servico-img {
+        width: 42px;
+        height: 42px;
+    }
+
+    .details-preco {
+        font-size: 13px;
+    }
+
+    .details-contatos {
+        flex-direction: column;
+    }
+
+    .details-contatos .details-btn {
+        width: 100%;
+    }
+}

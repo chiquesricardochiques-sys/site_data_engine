@@ -1,0 +1,58 @@
+<div class="login-card">
+
+    <div class="header">
+        <div class="logo-circle">
+            <i data-lucide="mail-check"></i>
+        </div>
+
+        <h2>Confirme a nova senha</h2>
+
+        <p class="subtitle">
+            Digite o código enviado para:
+        </p>
+
+        <p><strong>{{email}}</strong></p>
+    </div>
+
+    {{#if error}}
+        <div class="error-toast" role="alert">
+            <i data-lucide="alert-circle" style="width: 16px;"></i>
+            {{error}}
+        </div>
+    {{/if}}
+
+    <form action="/verify-recovery" method="POST">
+
+        <div class="form-group">
+            <div class="input-wrapper">
+                <i data-lucide="key-round"></i>
+
+                <input
+                    type="text"
+                    name="codigo"
+                    required
+                    autocomplete="one-time-code"
+                    inputmode="numeric"
+                    placeholder="Código recebido por e-mail"
+                    aria-label="Código de recuperação"
+                >
+            </div>
+        </div>
+
+        <button type="submit">
+            Confirmar nova senha
+            <i data-lucide="check-circle" style="width: 18px;"></i>
+        </button>
+
+    </form>
+
+    <div class="footer-links" style="justify-content: center;">
+        <p>
+            <a href="/forgot-password"
+               style="color:var(--primary-blue);font-weight:600;">
+                Voltar
+            </a>
+        </p>
+    </div>
+
+</div>
